@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    android:orientation="vertical"
+    tools:context=".CheckListActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_header_check_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="47dp"
+            android:fontFamily="@font/assistant_extrabold"
+            android:letterSpacing="0.04"
+            android:shadowColor="#a3000000"
+            android:shadowDx="0"
+            android:shadowDy="6"
+            android:shadowRadius="12"
+            android:textColor="#fc2f00"
+            android:textSize="100sp"
+            android:textStyle="normal"
+            android:text="@string/emergency" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="59dp"
+            android:fontFamily="@font/assistant_semibold"
+            android:letterSpacing="0.08"
+            android:lineSpacingExtra="-5sp"
+            android:shadowColor="#a3000000"
+            android:shadowDx="0"
+            android:shadowDy="6"
+            android:shadowRadius="12"
+            android:textColor="#ffffff"
+            android:textSize="84sp"
+            android:textStyle="bold"
+            android:text="@string/check_list" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_check_box_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/rl_check_box_1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <Button-->
+<!--                android:layout_width="128dp"-->
+<!--                android:layout_height="128dp"-->
+<!--                android:layout_marginStart="84dp"-->
+<!--                android:background="@drawable/checked_box_background" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="439dp"-->
+<!--                android:layout_height="600dp"-->
+<!--                android:layout_marginStart="47dp"-->
+<!--                android:layout_marginTop="45dp"-->
+<!--                android:background="@color/black_transparent_80percent"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="391dp"-->
+<!--                    android:layout_height="289dp"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="29dp"-->
+<!--                    android:layout_marginEnd="24dp"-->
+<!--                    android:background="@drawable/check_list_safety_zone_image"-->
+<!--                    android:contentDescription="@string/safety_zone_sign" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="28dp"-->
+<!--                    android:layout_marginEnd="56dp"-->
+<!--                    android:layout_marginBottom="21dp"-->
+<!--                    android:fontFamily="@font/assistant_semibold"-->
+<!--                    android:lineSpacingExtra="8sp"-->
+<!--                    android:text="@string/check_list_safety_zone_text"-->
+<!--                    android:textColor="#ffffff"-->
+<!--                    android:textSize="28sp"-->
+<!--                    android:textStyle="normal" />-->
+
+<!--            </LinearLayout>-->
+
+<!--        </RelativeLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/rl_check_box_2"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <Button-->
+<!--                android:layout_width="128dp"-->
+<!--                android:layout_height="128dp"-->
+<!--                android:layout_marginStart="84dp"-->
+<!--                android:background="@drawable/uncheked_box_background" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="439dp"-->
+<!--                android:layout_height="600dp"-->
+<!--                android:layout_marginStart="47dp"-->
+<!--                android:layout_marginTop="45dp"-->
+<!--                android:background="@color/black_transparent_80percent"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="391dp"-->
+<!--                    android:layout_height="289dp"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="29dp"-->
+<!--                    android:layout_marginEnd="24dp"-->
+<!--                    android:background="@drawable/emergency_kit_image"-->
+<!--                    android:contentDescription="@string/emergency_kit_sign" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="28dp"-->
+<!--                    android:layout_marginEnd="56dp"-->
+<!--                    android:layout_marginBottom="21dp"-->
+<!--                    android:fontFamily="@font/assistant_semibold"-->
+<!--                    android:lineSpacingExtra="8sp"-->
+<!--                    android:text="@string/emergency_kit_text"-->
+<!--                    android:textColor="#ffffff"-->
+<!--                    android:textSize="28sp"-->
+<!--                    android:textStyle="normal" />-->
+
+<!--            </LinearLayout>-->
+
+<!--        </RelativeLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/rl_check_box_3"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <Button-->
+<!--                android:layout_width="128dp"-->
+<!--                android:layout_height="128dp"-->
+<!--                android:layout_marginStart="84dp"-->
+<!--                android:background="@drawable/uncheked_box_background" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="439dp"-->
+<!--                android:layout_height="600dp"-->
+<!--                android:layout_marginStart="47dp"-->
+<!--                android:layout_marginTop="45dp"-->
+<!--                android:background="@color/black_transparent_80percent"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="391dp"-->
+<!--                    android:layout_height="289dp"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="29dp"-->
+<!--                    android:layout_marginEnd="24dp"-->
+<!--                    android:background="@drawable/forward_instructions_image"-->
+<!--                    android:contentDescription="@string/forward_instructions_sign" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="28dp"-->
+<!--                    android:layout_marginEnd="56dp"-->
+<!--                    android:layout_marginBottom="21dp"-->
+<!--                    android:fontFamily="@font/assistant_semibold"-->
+<!--                    android:lineSpacingExtra="8sp"-->
+<!--                    android:text="@string/forward_instructions_text"-->
+<!--                    android:textColor="#ffffff"-->
+<!--                    android:textSize="28sp"-->
+<!--                    android:textStyle="normal" />-->
+
+<!--            </LinearLayout>-->
+
+<!--        </RelativeLayout>-->
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/footer_check_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="43dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/forward_button" />
+
+        <Button
+            android:id="@+id/btn_back_to_menu"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp"
+            android:background="@drawable/back_button" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

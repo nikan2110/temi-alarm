@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">JapanMeeting</string>
+    <string name="check_list_safety_zone_text">Checking the integrity and readiness of the Safety Zone and the equipment in it, within 4 hours according to instructions of the Home Front Command</string>
+    <string name="emergency_kit_text">Hanging an emergency signage kit</string>
+    <string name="safety_zone_sign">safety_zone_sign</string>
+    <string name="emergency_kit_sign">emergency_kit_sign</string>
+    <string name="forward_instructions_text">Establishing contact, updating data and forwarding instructions to all departments in the clinic</string>
+    <string name="forward_instructions_sign">forward_instructions_sign</string>
+    <string name="pregnant_woman_image">pregnant_woman_image</string>
+    <string name="diabtic_patient_image">diabtic_patient_image</string>
+    <string name="asthma_patient_image">asthma_patient_image</string>
+    <string name="senior_patient_image">senior_patient_image</string>
+    <string name="pregnant_details">pregnant_details</string>
+    <string name="emergency">EMERGENCY</string>
+    <string name="instructions">INSTRUCTIONS</string>
+    <string name="check_list">CHECK LIST</string>
+    <string name="patient_in_risk">PATIENT IN RISK</string>
+</resources>
