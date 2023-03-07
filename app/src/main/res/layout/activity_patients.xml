@@ -324,7 +324,7 @@
                     android:layout_marginTop="15.5dp"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/diabetic_patient_background"
-                    android:contentDescription="@string/diabtic_patient_image">
+                    android:contentDescription="@string/diabetic_patient_image">
                 </ImageView>
 
 

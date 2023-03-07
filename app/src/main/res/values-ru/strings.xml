@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">JapanMeeting</string>
+    <string name="safety_zone_sign">знак безопасной зоны</string>
+    <string name="emergency_kit_sign">знак комплекта первой помощи</string>
+    <string name="forward_instructions_sign">знак следования инструкциям</string>
+    <string name="pregnant_woman_image">изображение беременной женщины</string>
+    <string name="diabetic_patient_image">изображение пациента с диабетом</string>
+    <string name="asthma_patient_image">изображение пациента с астмой</string>
+    <string name="senior_patient_image">изображение старого пациента</string>
+    <string name="pregnant_details">детали беременной пациентки</string>
+    <string name="emergency">ВНИМАНИЕ</string>
+    <string name="instructions">ИНСТРУКЦИИ</string>
+    <string name="check_list">СПИСОК ДЕЛ</string>
+    <string name="patient_in_risk">ПАЦИЕНТЫ В ГРУППЕ РИСКА</string>
+</resources>

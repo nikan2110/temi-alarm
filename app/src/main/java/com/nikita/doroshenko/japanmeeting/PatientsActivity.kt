@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.nikita.doroshenko.japanmeeting.utils.Constants
 
-class PatientsActivity : AppCompatActivity() {
+class PatientsActivity : BaseActivity(){
 
 
     private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1

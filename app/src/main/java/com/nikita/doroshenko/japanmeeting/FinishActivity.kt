@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 
-class FinishActivity : AppCompatActivity() {
+class FinishActivity : BaseActivity() {
 
     private lateinit var buttonBackToMainPage: Button
 

@@ -1,20 +1,27 @@
 package com.nikita.doroshenko.japanmeeting
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
+import android.support.annotation.NonNull
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.nikita.doroshenko.japanmeeting.utils.Constants
+import java.util.*
+
+
 //import com.robotemi.sdk.Robot
 //import com.robotemi.sdk.TtsRequest
 //import com.robotemi.sdk.listeners.OnRobotReadyListener
 
-class MainPageActivity : AppCompatActivity() {
+class MainPageActivity : BaseActivity() {
 
     private lateinit var buttonTemiInstructions: Button
     private lateinit var buttonForwardToMenu: Button
+    private lateinit var buttonBackToLanguage: Button
 //    private lateinit var robot: Robot
 
     companion object {
@@ -43,9 +50,16 @@ class MainPageActivity : AppCompatActivity() {
 //            robotSpeak(Constants.TEMI_SPEECH, true)
         }
 
-
+        buttonBackToLanguage = findViewById(R.id.btn_back_to_language)
+        buttonBackToLanguage.setOnClickListener {
+            val destinationActivity = LanguageActivity::class.java
+            val languageActivityIntent = Intent(this@MainPageActivity, destinationActivity)
+            startActivity(languageActivityIntent)
+        }
 
     }
+
+
 
 //    override fun onStart() {
 //        super.onStart()

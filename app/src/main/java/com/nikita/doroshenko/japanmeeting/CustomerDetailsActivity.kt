@@ -19,7 +19,7 @@ import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import java.io.File
 
-class CustomerDetailsActivity : AppCompatActivity() {
+class CustomerDetailsActivity : BaseActivity() {
 
     private lateinit var imageViewDetailPicture: ImageView
 

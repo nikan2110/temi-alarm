@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.nikita.doroshenko.japanmeeting.services.MailService
 
-class MenuActivity : AppCompatActivity() {
+class MenuActivity : BaseActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
 
@@ -29,8 +29,8 @@ class MenuActivity : AppCompatActivity() {
 
         buttonCheckList.setOnClickListener {
             val destinationActivity = CheckListActivity::class.java
-            val menuActivityIntent = Intent(this@MenuActivity, destinationActivity)
-            startActivity(menuActivityIntent)
+            val checkListActivityIntent = Intent(this@MenuActivity, destinationActivity)
+            startActivity(checkListActivityIntent)
         }
 
         buttonPatients.setOnClickListener {

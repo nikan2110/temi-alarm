@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CheckListActivity : AppCompatActivity() {
+class CheckListActivity : BaseActivity() {
 
     private lateinit var buttonBackMenu: Button
     private lateinit var checkBoxContent: LinearLayout
