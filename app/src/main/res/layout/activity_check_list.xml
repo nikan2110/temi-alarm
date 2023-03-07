@@ -46,12 +46,26 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/pb_check_list"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:indeterminateTint="@color/orange_transparent_80percent" />
+
+
+
 
     <LinearLayout
         android:id="@+id/ll_check_box_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+
+
 
 <!--        <RelativeLayout-->
 <!--            android:id="@+id/rl_check_box_1"-->

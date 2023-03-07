@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxLayout
@@ -20,6 +22,8 @@ class CheckListActivity : AppCompatActivity() {
 
     private lateinit var buttonBackMenu: Button
     private lateinit var checkBoxContent: LinearLayout
+    private lateinit var progressBarCheckList: ProgressBar
+
     private var retrofit = RetrofitClient.getClient()
     private var checkListService = retrofit.create(CheckListService::class.java)
 
@@ -32,6 +36,9 @@ class CheckListActivity : AppCompatActivity() {
 
         checkBoxContent = findViewById(R.id.ll_check_box_content)
 
+        progressBarCheckList = findViewById(R.id.pb_check_list)
+        progressBarCheckList.visibility = View.VISIBLE
+
         buttonBackMenu = findViewById(R.id.btn_back_to_menu)
         buttonBackMenu.setOnClickListener {
             val destinationActivity = MenuActivity::class.java
@@ -39,8 +46,10 @@ class CheckListActivity : AppCompatActivity() {
             startActivity(menuActivityIntent)
         }
 
+
         checkListService.allCheckLists.enqueue(object : Callback<List<CheckListModel>> {
             override fun onResponse(call: Call<List<CheckListModel>>, response: Response<List<CheckListModel>>) {
+                progressBarCheckList.visibility = View.GONE
                 val checkListModels: List<CheckListModel>? = response.body()
                 if (checkListModels != null) {
                     Log.i("getCheckLists", "received ${checkListModels.size} checkLists models")
@@ -64,6 +73,7 @@ class CheckListActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<CheckListModel>>, t: Throwable) {
+                progressBarCheckList.visibility = View.VISIBLE
                 val errorMessage = t.message
                 Log.e("getCheckListsFailure", "Error retrieving data from server: $errorMessage")
             }
