@@ -7,6 +7,8 @@ public class CheckListModel {
     private String text;
     private boolean done;
 
+    private String tag;
+
     public String getId() {
         return id;
     }
@@ -31,12 +33,25 @@ public class CheckListModel {
         this.done = done;
     }
 
+    public boolean isDone() {
+        return done;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public String toString() {
         return "CheckListModel{" +
                 "id='" + id + '\'' +
                 ", text='" + text + '\'' +
-                ", isDone=" + done +
+                ", done=" + done +
+                ", tag='" + tag + '\'' +
                 '}';
     }
 }

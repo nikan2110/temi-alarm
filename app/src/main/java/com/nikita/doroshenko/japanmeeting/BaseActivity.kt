@@ -17,7 +17,6 @@ open class BaseActivity : AppCompatActivity() {
         // Load the selected language from shared preferences
         val prefs = newBase.getSharedPreferences("LanguagePreference", MODE_PRIVATE)
         var language = prefs.getString("language", "")
-        Log.i("BaseActivity", "received language $language")
         // Set the default language to English if no language is set
         if (language!!.isEmpty()) {
             language = "en"

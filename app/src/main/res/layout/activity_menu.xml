@@ -56,7 +56,7 @@
                 android:id="@+id/btn_check_list"
                 android:layout_width="364dp"
                 android:layout_height="364dp"
-                android:layout_marginRight="124dp"
+                android:layout_marginEnd="124dp"
                 android:layout_gravity="center|center_horizontal"
                 android:background="@drawable/check_list_button" />
 

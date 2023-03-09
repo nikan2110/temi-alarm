@@ -63,7 +63,8 @@
             android:background="@drawable/instructions_button"
             android:textColor="@color/white"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:foreground="?android:attr/selectableItemBackground" />
     </LinearLayout>
 
     <RelativeLayout
@@ -77,7 +78,8 @@
             android:layout_height="120dp"
             android:layout_marginEnd="50dp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/forward_button" />
+            android:background="@drawable/forward_button"
+            android:foreground="?android:attr/selectableItemBackground" />
 
         <Button
             android:id="@+id/btn_back_to_language"
@@ -85,7 +87,8 @@
             android:layout_height="120dp"
             android:layout_marginStart="50dp"
             android:layout_alignParentStart="true"
-            android:background="@drawable/back_button" />
+            android:background="@drawable/back_button"
+            android:foreground="?android:attr/selectableItemBackground" />
 
     </RelativeLayout>
 

@@ -1,13 +1,16 @@
 package com.nikita.doroshenko.japanmeeting
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxLayout
@@ -17,6 +20,9 @@ import com.nikita.doroshenko.japanmeeting.services.CheckListService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CheckListActivity : BaseActivity() {
 
@@ -34,6 +40,9 @@ class CheckListActivity : BaseActivity() {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
+        val language = Locale.getDefault().language
+        Log.i("CheckListActivity", "received language for checklist $language")
+
         checkBoxContent = findViewById(R.id.ll_check_box_content)
 
         progressBarCheckList = findViewById(R.id.pb_check_list)
@@ -47,7 +56,7 @@ class CheckListActivity : BaseActivity() {
         }
 
 
-        checkListService.allCheckLists.enqueue(object : Callback<List<CheckListModel>> {
+        checkListService.getAllCheckLists(language).enqueue(object : Callback<List<CheckListModel>> {
             override fun onResponse(call: Call<List<CheckListModel>>, response: Response<List<CheckListModel>>) {
                 progressBarCheckList.visibility = View.GONE
                 val checkListModels: List<CheckListModel>? = response.body()
@@ -102,11 +111,24 @@ class CheckListActivity : BaseActivity() {
     private fun createCheckBoxes(checkListModels: List<CheckListModel>): ArrayList<CheckBoxLayout> {
         val checkBoxLayouts = ArrayList<CheckBoxLayout>()
         for (checkListModel in checkListModels) {
-            val checkBoxLayout = CheckBoxLayout(this, checkListModel.text, checkListModel.id, checkListModel.done())
+            val checkBoxLayout = CheckBoxLayout(this, checkListModel.text, checkListModel.id, checkListModel.done(), checkListModel.tag)
+            val layoutParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.marginEnd= 16.dpToPx()
             checkBoxContent.addView(checkBoxLayout)
             checkBoxLayouts.add(checkBoxLayout)
         }
         return checkBoxLayouts
+    }
+
+    private fun Int.dpToPx(): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        ).toInt()
     }
 
 }

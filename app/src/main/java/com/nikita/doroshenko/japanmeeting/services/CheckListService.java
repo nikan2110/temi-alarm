@@ -10,11 +10,12 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface CheckListService {
 
     @GET("checkLists")
-    Call<List<CheckListModel>> getAllCheckLists();
+    Call<List<CheckListModel>> getAllCheckLists(@Query("language") String language);
 
     @PATCH("checkLists/{checkListId}")
     Call<CheckListModel> updateStatus(@Path("checkListId") String checkListIdm, @Body Map<String, Boolean> checkListStatusUpdate);

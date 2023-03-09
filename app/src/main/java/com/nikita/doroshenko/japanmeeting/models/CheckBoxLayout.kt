@@ -7,7 +7,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import com.nikita.doroshenko.japanmeeting.R
 
-class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Boolean) : RelativeLayout(context) {
+class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Boolean, tag: String) : RelativeLayout(context) {
 
      val button = Button(context)
      val checkBoxId = id
@@ -36,6 +36,7 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
             600.dpToPx()
         ).apply {
             setMargins(47.dpToPx(), 45.dpToPx(), 0, 0)
+            marginStart = 47.dpToPx()
         }
         linearLayout.background = AppCompatResources.getDrawable(context,R.color.black_transparent_80percent)
         linearLayout.orientation = LinearLayout.VERTICAL
@@ -49,16 +50,16 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
         ).apply {
             setMargins(24.dpToPx(), 29.dpToPx(), 24.dpToPx(), 0)
         }
-        when(checkBoxId) {
-            "6405b4aef8f770781c8d7974" -> {
+        when(tag) {
+            "integrity" -> {
                 imageView.background = AppCompatResources.getDrawable(context, R.drawable.check_list_safety_zone_image)
                 imageView.contentDescription = context.getString(R.string.safety_zone_sign)
             }
-            "6405b71af8f770781c8d7977" -> {
+            "kit" -> {
                 imageView.background = AppCompatResources.getDrawable(context, R.drawable.emergency_kit_image)
                 imageView.contentDescription = context.getString(R.string.emergency_kit_sign)
             }
-            "6405b852f8f770781c8d7978" -> {
+            "contact" -> {
                 imageView.background = AppCompatResources.getDrawable(context, R.drawable.forward_instructions_image)
                 imageView.contentDescription = context.getString(R.string.forward_instructions_sign)
             }
