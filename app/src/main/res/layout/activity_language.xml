@@ -3,25 +3,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LanguageActivity"
-    android:orientation="vertical">
+    android:background="@drawable/main_background"
+    android:orientation="vertical"
+    tools:context=".LanguageActivity">
 
-    <Button
-        android:id="@+id/btn_russian"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RUSSIAN"/>
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
 
-    <Button
-        android:id="@+id/btn_hebrew"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/assistant_semibold"
+        android:letterSpacing="0.18"
+        android:shadowColor="#a3000000"
+        android:shadowDx="0"
+        android:shadowDy="6"
+        android:shadowRadius="12"
+        android:text="@string/choose_a_language_en"
+        android:textColor="#ffffff"
+        android:textSize="120sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/assistant_semibold"
+        android:letterSpacing="0.18"
+        android:shadowColor="#a3000000"
+        android:shadowDx="0"
+        android:shadowDy="6"
+        android:shadowRadius="12"
+        android:text="@string/choose_a_language_ru"
+        android:textColor="#ffffff"
+        android:textSize="120sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/assistant_semibold"
+        android:letterSpacing="0.18"
+        android:shadowColor="#a3000000"
+        android:shadowDx="0"
+        android:shadowDy="6"
+        android:shadowRadius="12"
+        android:text="@string/choose_a_language_he"
+        android:textColor="#ffffff"
+        android:textSize="120sp"
+        android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="HEBREW"/>
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_forward_to_main_page"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="FORWARD"/>
+
+        <ImageView
+            android:id="@+id/btn_hebrew"
+            android:layout_width="537dp"
+            android:layout_height="410dp"
+            android:background="@drawable/israel_round_icon_640"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:scaleType="fitCenter" />
+
+        <ImageView
+            android:id="@+id/btn_english"
+            android:layout_width="537dp"
+            android:layout_height="410dp"
+            android:background="@drawable/united_states_of_america_round_icon_640"
+            android:scaleType="centerInside"
+            android:foreground="?android:attr/selectableItemBackground" />
+
+        <ImageView
+            android:id="@+id/btn_russian"
+            android:layout_width="537dp"
+            android:layout_height="410dp"
+            android:background="@drawable/russia_round_icon_640"
+            android:scaleType="centerInside"
+            android:foreground="?android:attr/selectableItemBackground"
+/>
+
+
+    </LinearLayout>
 
 </LinearLayout>

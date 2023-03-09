@@ -12,4 +12,8 @@
     <string name="instructions">INSTRUCTIONS</string>
     <string name="check_list">CHECK LIST</string>
     <string name="patient_in_risk">PATIENTS IN RISK</string>
+    <string name="choose_a_language_en" translatable="false">Choose a language</string>
+    <string name="choose_a_language_ru" translatable="false">Выберите язык</string>
+    <string name="choose_a_language_he" translatable="false">בחר שפה</string>
+
 </resources>

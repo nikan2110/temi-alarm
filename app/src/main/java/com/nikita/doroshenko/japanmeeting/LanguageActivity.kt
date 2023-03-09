@@ -4,15 +4,16 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
 
 class LanguageActivity : AppCompatActivity() {
 
-    private lateinit var buttonRussian: Button
-    private lateinit var buttonHebrew: Button
-    private lateinit var buttonForwardToMainPage: Button
+    private lateinit var buttonRussian: ImageView
+    private lateinit var buttonHebrew: ImageView
+    private lateinit var buttonEnglish: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,23 +21,29 @@ class LanguageActivity : AppCompatActivity() {
 
         buttonRussian = findViewById(R.id.btn_russian)
         buttonRussian.setOnClickListener {
-            setLocale(Locale("ru"));
+            setLocale(Locale("ru"))
+            openMainPage()
         }
 
         buttonHebrew = findViewById(R.id.btn_hebrew)
         buttonHebrew.setOnClickListener {
             setLocale(Locale("he"))
+            openMainPage()
         }
 
-        buttonForwardToMainPage = findViewById(R.id.btn_forward_to_main_page)
-        buttonForwardToMainPage.setOnClickListener {
-            val destinationActivity = MainPageActivity::class.java
-            val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
-            startActivity(mainPageActivityIntent)
+        buttonEnglish = findViewById(R.id.btn_english)
+        buttonEnglish.setOnClickListener {
+            openMainPage()
         }
 
         removeLanguageFromSharedPreferences()
 
+    }
+
+    private fun openMainPage() {
+        val destinationActivity = MainPageActivity::class.java
+        val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
+        startActivity(mainPageActivityIntent)
     }
 
     private fun setLocale(locale: Locale) {
