@@ -9,9 +9,6 @@ import java.util.*
 
 
 open class BaseActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun attachBaseContext(newBase: Context) {
         // Load the selected language from shared preferences

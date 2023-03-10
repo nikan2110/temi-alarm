@@ -35,8 +35,8 @@ class MenuActivity : BaseActivity() {
 
         buttonPatients.setOnClickListener {
             val destinationActivity = PatientsActivity::class.java
-            val menuActivityIntent = Intent(this@MenuActivity, destinationActivity)
-            startActivity(menuActivityIntent)
+            val patientsActivityIntent = Intent(this@MenuActivity, destinationActivity)
+            startActivity(patientsActivityIntent)
         }
 
         buttonBackMainPage.setOnClickListener {

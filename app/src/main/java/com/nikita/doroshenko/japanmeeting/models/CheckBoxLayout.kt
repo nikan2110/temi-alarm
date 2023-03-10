@@ -21,6 +21,7 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
         button.layoutParams = LayoutParams(128.dpToPx(), 128.dpToPx()).apply {
             setMargins(84.dpToPx(), 0, 0, 0)
         }
+        button.foreground = context.obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground)).getDrawable(0)
         if (checkIsDone) {
             button.background = AppCompatResources.getDrawable(context,R.drawable.checked_box_background)
         } else {
