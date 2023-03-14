@@ -5,14 +5,15 @@ import android.graphics.Color
 import android.view.View
 import android.widget.RelativeLayout
 
-class ViewHorizontalLine(context: Context, marginStart: Int, marginTop: Int): View(context) {
+class ViewHorizontalLine(context: Context, marginStartParams: Int, marginTopParams: Int): View(context) {
 
-    var marginStart = marginStart
-    var marginTop = marginTop
+    var marginStartParams = marginStartParams
+    var marginTopParams = marginTopParams
 
     init {
         layoutParams = RelativeLayout.LayoutParams(389.dpToPx(), 3.dpToPx()).apply {
-            setMargins(marginStart.dpToPx(), marginTop.dpToPx(), 0, 0)
+            setMargins(0, marginTopParams.dpToPx(), 0, 0)
+            marginStart = marginStartParams.dpToPx()
         }
         setBackgroundColor(Color.parseColor("#221219"))
     }

@@ -47,7 +47,7 @@ class PatientLayout(context: Context,
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         // Button patient is checked params
         buttonPatientIsChecked.layoutParams = LayoutParams(128.dpToPx(), 128.dpToPx()).apply {
-            setMargins(84.dpToPx(), 0, 0, 0)
+            marginStart = 84.dpToPx()
         }
         buttonPatientIsChecked.foreground = context.obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground)).getDrawable(0)
         if (isChecked) {
@@ -60,7 +60,8 @@ class PatientLayout(context: Context,
 
         // Linear layout patient card params
         linearLayoutPatientCard.layoutParams = LayoutParams(439.dpToPx(), 600.dpToPx()).apply {
-            setMargins(60.dpToPx(), 45.dpToPx(), 0, 0)
+            setMargins(0.dpToPx(), 45.dpToPx(), 0, 0)
+            marginStart = 60.dpToPx()
         }
         linearLayoutPatientCard.orientation = LinearLayout.VERTICAL
         when(patientStatus) {
@@ -83,7 +84,7 @@ class PatientLayout(context: Context,
 
         // Text view patient name params
         textViewPatientName.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-            setMargins(24.dpToPx(), 1.dpToPx(), 0, 0)
+            marginStart = 24.dpToPx()
         }
         textViewPatientName.typeface = ResourcesCompat.getFont(context, R.font.assistant_semibold)
         textViewPatientName.text = patientName
@@ -106,7 +107,7 @@ class PatientLayout(context: Context,
 
         // Text view patient number params
         textViewPatientNumber.layoutParams = LayoutParams(325.dpToPx(), 54.dpToPx()).apply {
-            setMargins(24.dpToPx(), 0, 0, 0)
+            marginStart = 24.dpToPx()
         }
         textViewPatientNumber.typeface = ResourcesCompat.getFont(context, R.font.assistant_semibold)
         textViewPatientNumber.text = patientPhoneNumber
@@ -129,7 +130,8 @@ class PatientLayout(context: Context,
 
         // Text view patient age params
         textViewPatientAge.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-            setMargins(24.dpToPx(), 9.dpToPx(), 0, 0)
+            setMargins(0, 9.dpToPx(), 0, 0)
+            marginStart = 24.dpToPx()
         }
         textViewPatientAge.typeface = ResourcesCompat.getFont(context, R.font.assistant_semibold)
         textViewPatientAge.text = patientAge
@@ -174,8 +176,9 @@ class PatientLayout(context: Context,
 
         // Image view patient picture params
         imageViewPatientPicture.layoutParams = LinearLayout.LayoutParams(391.dpToPx(), 199.dpToPx()).apply {
+            setMargins(0, 16.dpToPx(), 0,0)
             marginStart = 20.dpToPx()
-            topMargin = 16.dpToPx()
+
         }
         when(patientType) {
             "Pregnant" -> {

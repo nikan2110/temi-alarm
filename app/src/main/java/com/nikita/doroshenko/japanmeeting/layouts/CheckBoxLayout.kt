@@ -17,11 +17,11 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
     init {
         // Set layout parameters for the RelativeLayout
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-            marginEnd= 16.dpToPx()
+            marginStart = 15.dpToPx()
         }
         // Create and add the Button to the RelativeLayout
         button.layoutParams = LayoutParams(128.dpToPx(), 128.dpToPx()).apply {
-            setMargins(84.dpToPx(), 0, 0, 0)
+            marginStart = 84.dpToPx()
         }
         button.foreground = context.obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground)).getDrawable(0)
         if (checkIsDone) {
@@ -31,6 +31,7 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
 
         }
         addView(button)
+        // =======================================================================================
 
         // Create and add the LinearLayout to the RelativeLayout
         val linearLayout = LinearLayout(context)
@@ -38,12 +39,13 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
             439.dpToPx(),
             600.dpToPx()
         ).apply {
-            setMargins(47.dpToPx(), 45.dpToPx(), 0, 0)
+            setMargins(0, 45.dpToPx(), 0, 0)
             marginStart = 47.dpToPx()
         }
         linearLayout.background = AppCompatResources.getDrawable(context,R.color.black_transparent_80percent)
         linearLayout.orientation = LinearLayout.VERTICAL
         addView(linearLayout)
+        // =======================================================================================
 
         // Create and add the ImageView to the LinearLayout
         val imageView = ImageView(context)
@@ -51,7 +53,9 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
             391.dpToPx(),
             289.dpToPx()
         ).apply {
-            setMargins(24.dpToPx(), 29.dpToPx(), 24.dpToPx(), 0)
+            setMargins(0, 29.dpToPx(), 0, 0)
+            marginStart = 24.dpToPx()
+            marginEnd = 24.dpToPx()
         }
         when(tag) {
             "integrity" -> {
@@ -68,6 +72,7 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
             }
         }
         linearLayout.addView(imageView)
+        // =======================================================================================
 
         // Create and add the TextView to the LinearLayout
         val textView = TextView(context)
@@ -75,7 +80,10 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
             LayoutParams.WRAP_CONTENT,
             LayoutParams.WRAP_CONTENT
         ).apply {
-            setMargins(24.dpToPx(), 28.dpToPx(), 56.dpToPx(), 21.dpToPx())
+            setMargins(0, 28.dpToPx(), 0, 21.dpToPx())
+            marginStart = 24.dpToPx()
+            marginEnd = 56.dpToPx()
+
         }
         textView.text = checkBoxText
         textView.setTextColor(Color.WHITE)

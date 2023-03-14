@@ -55,6 +55,15 @@
 
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/pb_patients_list"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:indeterminate="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="150dp"
+                android:indeterminateTint="@color/orange_transparent_80percent" />
+
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -617,14 +626,14 @@
                 android:layout_marginTop="43dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_forward_to_finish"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="50dp"
-                    android:background="@drawable/forward_button"
-                    android:foreground="?android:attr/selectableItemBackground" />
+<!--                <Button-->
+<!--                    android:id="@+id/btn_forward_to_finish"-->
+<!--                    android:layout_width="120dp"-->
+<!--                    android:layout_height="120dp"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginEnd="50dp"-->
+<!--                    android:background="@drawable/forward_button"-->
+<!--                    android:foreground="?android:attr/selectableItemBackground" />-->
 
                 <Button
                     android:id="@+id/btn_back_to_menu"

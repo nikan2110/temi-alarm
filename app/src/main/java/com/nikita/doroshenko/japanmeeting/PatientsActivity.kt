@@ -5,8 +5,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,8 +33,9 @@ class PatientsActivity : BaseActivity(){
 
     private lateinit var patientListContent: LinearLayout
 
+    private lateinit var progressBarPatientsList: ProgressBar
+
     private lateinit var buttonBackToMenu: Button
-    private lateinit var buttonForwardToFinish: Button
 
     private var retrofit = RetrofitClient.getClient()
     private var patientListService = retrofit.create(PatientListService::class.java)
@@ -53,6 +56,9 @@ class PatientsActivity : BaseActivity(){
 
         patientListContent = findViewById(R.id.ll_patient_content)
 
+        progressBarPatientsList = findViewById(R.id.pb_patients_list)
+        progressBarPatientsList.visibility = View.VISIBLE
+
         buttonBackToMenu = findViewById(R.id.btn_back_to_menu)
         buttonBackToMenu.setOnClickListener {
             val destinationActivity = MenuActivity::class.java
@@ -60,16 +66,10 @@ class PatientsActivity : BaseActivity(){
             startActivity(menuActivityIntent)
         }
 
-        buttonForwardToFinish = findViewById(R.id.btn_forward_to_finish)
-        buttonForwardToFinish.setOnClickListener {
-            val destinationActivity = FinishActivity::class.java
-            val finishActivityIntent = Intent(this@PatientsActivity, destinationActivity)
-            startActivity(finishActivityIntent)
-        }
-
 
         patientListService.allPatients.enqueue(object: Callback<List<PatientModel>> {
             override fun onResponse(call: Call<List<PatientModel>>, response: Response<List<PatientModel>>) {
+                progressBarPatientsList.visibility = View.GONE
                 val patientModels: List<PatientModel>? = response.body()
                 if (patientModels != null) {
                     Log.i("getPatients", "received ${patientModels.size} patient models")
@@ -103,13 +103,13 @@ class PatientsActivity : BaseActivity(){
 
                             }
 
-
                         }
                     }
                 }
             }
 
             override fun onFailure(call: Call<List<PatientModel>>, t: Throwable) {
+                progressBarPatientsList.visibility = View.VISIBLE
                 val errorMessage = t.message
                 Log.e("getCheckListsFailure", "Error retrieving data from server: $errorMessage")
             }
