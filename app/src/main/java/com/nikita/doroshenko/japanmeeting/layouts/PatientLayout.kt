@@ -23,23 +23,25 @@ class PatientLayout(context: Context,
                     var patientPhoneNumber: String, var patientAge: String, var patientType: String
 ) : RelativeLayout(context) {
 
+    var isChecked = isChecked
 
-    private val buttonPatientIsChecked = Button(context)
-    private val linearLayoutPatientCard = LinearLayout(context)
-    private val viewHorizontalLineOne = ViewHorizontalLine(context, 22, 102)
-    private val textViewPatientName = TextView(context)
-    private val linearLayoutPhoneNumber = LinearLayout(context)
-    private val linearLayoutPhoneNumberText = LinearLayout(context)
-    private val textViewPatientNumber = TextView(context)
-    private val buttonPhone = Button(context)
-    private val viewHorizontalLineTwo = ViewHorizontalLine(context, 22, 4)
-    private val textViewPatientAge = TextView(context)
-    private val linearLayoutPatientDetails = LinearLayout(context)
-    private val linearLayoutPatientDetailsText = LinearLayout(context)
-    private val textViewPatientType = TextView(context)
-    private val buttonDetails = Button(context)
-    private val viewHorizontalLineThree = ViewHorizontalLine(context, 22, 5)
-    private val imageViewPatientPicture = ImageView(context)
+
+    val buttonPatientIsChecked = Button(context)
+    val linearLayoutPatientCard = LinearLayout(context)
+    val viewHorizontalLineOne = ViewHorizontalLine(context, 22, 102)
+    val textViewPatientName = TextView(context)
+    val linearLayoutPhoneNumber = LinearLayout(context)
+    val linearLayoutPhoneNumberText = LinearLayout(context)
+    val textViewPatientNumber = TextView(context)
+    val buttonPhone = Button(context)
+    val viewHorizontalLineTwo = ViewHorizontalLine(context, 22, 4)
+    val textViewPatientAge = TextView(context)
+    val linearLayoutPatientDetails = LinearLayout(context)
+    val linearLayoutPatientDetailsText = LinearLayout(context)
+    val textViewPatientType = TextView(context)
+    val buttonDetails = Button(context)
+    val viewHorizontalLineThree = ViewHorizontalLine(context, 22, 5)
+    val imageViewPatientPicture = ImageView(context)
 
     init {
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)

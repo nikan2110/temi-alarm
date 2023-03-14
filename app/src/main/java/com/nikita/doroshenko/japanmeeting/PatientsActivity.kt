@@ -10,9 +10,12 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.nikita.doroshenko.japanmeeting.layouts.CheckBoxLayout
 import com.nikita.doroshenko.japanmeeting.layouts.PatientLayout
+import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
 import com.nikita.doroshenko.japanmeeting.models.PatientModel
 import com.nikita.doroshenko.japanmeeting.services.PatientListService
 import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
@@ -69,14 +72,46 @@ class PatientsActivity : BaseActivity(){
             override fun onResponse(call: Call<List<PatientModel>>, response: Response<List<PatientModel>>) {
                 val patientModels: List<PatientModel>? = response.body()
                 if (patientModels != null) {
-                    println(patientModels)
                     Log.i("getPatients", "received ${patientModels.size} patient models")
                     val patientsLayout: ArrayList<PatientLayout> = createPatients(patientModels)
+                    for (patientLayout in patientsLayout) {
+                        patientLayout.buttonPatientIsChecked.setOnClickListener {
+                            val body:HashMap<String, Boolean> = HashMap()
+                            if (patientLayout.isChecked ) {
+                                patientLayout.buttonPatientIsChecked.background =
+                                    AppCompatResources.getDrawable(this@PatientsActivity,R.drawable.unchecked_patient_background)
+                                body["patientStatusUpdate"] = false
+                                changeStatusRequest(patientLayout, body)
+                            } else {
+                                patientLayout.buttonPatientIsChecked.background =
+                                    AppCompatResources.getDrawable(this@PatientsActivity,R.drawable.checked_patient_background)
+                                body["patientStatusUpdate"] = true
+                                changeStatusRequest(patientLayout, body)
+                            }
+                        }
+                        patientLayout.buttonPhone.setOnClickListener {
+                            Toast.makeText(this@PatientsActivity, "Temi is calling", Toast.LENGTH_SHORT).show()
+                        }
+                        patientLayout.buttonDetails.setOnClickListener {
+                            when(patientLayout.patientType) {
+                                "Pregnant" -> {
+                                    runLikeActivity("/storage/emulated/0/Download/PregnantDetails.png")
+                                }
+                                "Diabetic" -> {
+                                    runLikeActivity("/storage/emulated/0/Download/Diabetics.png")
+                                }
+
+                            }
+
+
+                        }
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<PatientModel>>, t: Throwable) {
-                TODO("Not yet implemented")
+                val errorMessage = t.message
+                Log.e("getCheckListsFailure", "Error retrieving data from server: $errorMessage")
             }
 
         })
@@ -93,11 +128,25 @@ class PatientsActivity : BaseActivity(){
             patientsLayout.add(patientLayout)
         }
 
-
-
-
-
         return patientsLayout
+    }
+
+    private fun changeStatusRequest(patientLayout: PatientLayout, body: HashMap<String, Boolean>) {
+        patientListService.updatePatientStatus(patientLayout.patientId, body).enqueue(object : Callback<PatientModel> {
+            override fun onResponse(call: Call<PatientModel>, response: Response<PatientModel>) {
+                val patientModel: PatientModel? = response.body()
+                if (patientModel != null) {
+                    Log.i("changedStatus", "changed status to ${patientModel.isChecked} ")
+                    patientLayout.isChecked = patientModel.isChecked
+                }
+            }
+
+            override fun onFailure(call: Call<PatientModel>, t: Throwable) {
+                val errorMessage = t.message
+                Log.e("changedStatusFailure", "Error retrieving data from server: $errorMessage")
+            }
+
+        })
     }
 
     private fun startCustomerDetailsActivity() {

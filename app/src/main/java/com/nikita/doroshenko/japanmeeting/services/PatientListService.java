@@ -18,6 +18,6 @@ public interface PatientListService {
     Call<List<PatientModel>> getAllPatients();
 
     @PATCH("patients/{patientId}")
-    Call<CheckBoxModel> updateStatus(@Path("patientId") String patientId, @Body Map<String, Boolean> patientStatusUpdate);
+    Call<PatientModel> updatePatientStatus(@Path("patientId") String patientId, @Body Map<String, Boolean> patientStatusUpdate);
 
 }

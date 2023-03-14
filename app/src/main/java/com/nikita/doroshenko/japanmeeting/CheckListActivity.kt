@@ -89,7 +89,7 @@ class CheckListActivity : BaseActivity() {
     }
 
     private fun changeStatusRequest(checkBoxLayout: CheckBoxLayout, body: HashMap<String, Boolean>) {
-        checkBoxListService.updateStatus(checkBoxLayout.checkBoxId, body).enqueue(object : Callback<CheckBoxModel> {
+        checkBoxListService.updateCheckBoxStatus(checkBoxLayout.checkBoxId, body).enqueue(object : Callback<CheckBoxModel> {
             override fun onResponse(call: Call<CheckBoxModel>, response: Response<CheckBoxModel>) {
                 val checkBoxModel: CheckBoxModel? = response.body()
                 if (checkBoxModel != null) {

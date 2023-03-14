@@ -18,6 +18,6 @@ public interface CheckBoxListService {
     Call<List<CheckBoxModel>> getAllCheckBoxes(@Query("language") String language);
 
     @PATCH("checkBoxes/{checkBoxId}")
-    Call<CheckBoxModel> updateStatus(@Path("checkBoxId") String checkBoxId, @Body Map<String, Boolean> checkBoxStatusUpdate);
+    Call<CheckBoxModel> updateCheckBoxStatus(@Path("checkBoxId") String checkBoxId, @Body Map<String, Boolean> checkBoxStatusUpdate);
 
 }
