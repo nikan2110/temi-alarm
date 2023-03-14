@@ -10,13 +10,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import com.nikita.doroshenko.japanmeeting.models.CheckBoxLayout
-import com.nikita.doroshenko.japanmeeting.models.CheckListModel
+import com.nikita.doroshenko.japanmeeting.layouts.CheckBoxLayout
+import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
 import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
-import com.nikita.doroshenko.japanmeeting.services.CheckListService
+import com.nikita.doroshenko.japanmeeting.services.CheckBoxListService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +29,7 @@ class CheckListActivity : BaseActivity() {
     private lateinit var progressBarCheckList: ProgressBar
 
     private var retrofit = RetrofitClient.getClient()
-    private var checkListService = retrofit.create(CheckListService::class.java)
+    private var checkBoxListService = retrofit.create(CheckBoxListService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,23 +54,23 @@ class CheckListActivity : BaseActivity() {
         }
 
 
-        checkListService.getAllCheckLists(language).enqueue(object : Callback<List<CheckListModel>> {
-            override fun onResponse(call: Call<List<CheckListModel>>, response: Response<List<CheckListModel>>) {
+        checkBoxListService.getAllCheckBoxes(language).enqueue(object : Callback<List<CheckBoxModel>> {
+            override fun onResponse(call: Call<List<CheckBoxModel>>, response: Response<List<CheckBoxModel>>) {
                 progressBarCheckList.visibility = View.GONE
-                val checkListModels: List<CheckListModel>? = response.body()
-                if (checkListModels != null) {
-                    Log.i("getCheckLists", "received ${checkListModels.size} checkLists models")
-                    val checkBoxLayouts: ArrayList<CheckBoxLayout> = createCheckBoxes(checkListModels)
+                val checkBoxModels: List<CheckBoxModel>? = response.body()
+                if (checkBoxModels != null) {
+                    Log.i("getCheckLists", "received ${checkBoxModels.size} checkLists models")
+                    val checkBoxLayouts: ArrayList<CheckBoxLayout> = createCheckBoxes(checkBoxModels)
                     for (checkBoxLayout in checkBoxLayouts){
                         checkBoxLayout.button.setOnClickListener {
                             val body:HashMap<String, Boolean> = HashMap()
                             if (checkBoxLayout.checkIsDone ) {
                                 checkBoxLayout.button.background = AppCompatResources.getDrawable(this@CheckListActivity,R.drawable.unchecked_box_background)
-                                body["checkListStatusUpdate"] = false
+                                body["checkBoxStatusUpdate"] = false
                                 changeStatusRequest(checkBoxLayout, body)
                             } else {
                                 checkBoxLayout.button.background = AppCompatResources.getDrawable(this@CheckListActivity,R.drawable.checked_box_background)
-                                body["checkListStatusUpdate"] = true
+                                body["checkBoxStatusUpdate"] = true
                                 changeStatusRequest(checkBoxLayout, body)
                             }
                         }
@@ -81,7 +79,7 @@ class CheckListActivity : BaseActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<List<CheckListModel>>, t: Throwable) {
+            override fun onFailure(call: Call<List<CheckBoxModel>>, t: Throwable) {
                 progressBarCheckList.visibility = View.VISIBLE
                 val errorMessage = t.message
                 Log.e("getCheckListsFailure", "Error retrieving data from server: $errorMessage")
@@ -91,16 +89,16 @@ class CheckListActivity : BaseActivity() {
     }
 
     private fun changeStatusRequest(checkBoxLayout: CheckBoxLayout, body: HashMap<String, Boolean>) {
-        checkListService.updateStatus(checkBoxLayout.checkBoxId, body).enqueue(object : Callback<CheckListModel> {
-            override fun onResponse(call: Call<CheckListModel>, response: Response<CheckListModel>) {
-                val checkListModel: CheckListModel? = response.body()
-                if (checkListModel != null) {
-                    Log.i("changedStatus", "changed status to ${checkListModel.done()} ")
-                    checkBoxLayout.checkIsDone = checkListModel.done()
+        checkBoxListService.updateStatus(checkBoxLayout.checkBoxId, body).enqueue(object : Callback<CheckBoxModel> {
+            override fun onResponse(call: Call<CheckBoxModel>, response: Response<CheckBoxModel>) {
+                val checkBoxModel: CheckBoxModel? = response.body()
+                if (checkBoxModel != null) {
+                    Log.i("changedStatus", "changed status to ${checkBoxModel.done()} ")
+                    checkBoxLayout.checkIsDone = checkBoxModel.done()
                 }
             }
 
-            override fun onFailure(call: Call<CheckListModel>, t: Throwable) {
+            override fun onFailure(call: Call<CheckBoxModel>, t: Throwable) {
                 val errorMessage = t.message
                 Log.e("changedStatusFailure", "Error retrieving data from server: $errorMessage")
             }
@@ -108,19 +106,19 @@ class CheckListActivity : BaseActivity() {
         })
     }
 
-    private fun createCheckBoxes(checkListModels: List<CheckListModel>): ArrayList<CheckBoxLayout> {
-        val checkBoxLayouts = ArrayList<CheckBoxLayout>()
-        for (checkListModel in checkListModels) {
+    private fun createCheckBoxes(checkBoxModels: List<CheckBoxModel>): ArrayList<CheckBoxLayout> {
+        val checkBoxesLayout = ArrayList<CheckBoxLayout>()
+        for (checkListModel in checkBoxModels) {
             val checkBoxLayout = CheckBoxLayout(this, checkListModel.text, checkListModel.id, checkListModel.done(), checkListModel.tag)
-            val layoutParams = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams.marginEnd= 16.dpToPx()
+//            val layoutParams = RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.WRAP_CONTENT,
+//                RelativeLayout.LayoutParams.WRAP_CONTENT
+//            )
+//            layoutParams.marginEnd= 16.dpToPx()
             checkBoxContent.addView(checkBoxLayout)
-            checkBoxLayouts.add(checkBoxLayout)
+            checkBoxesLayout.add(checkBoxLayout)
         }
-        return checkBoxLayouts
+        return checkBoxesLayout
     }
 
     private fun Int.dpToPx(): Int {

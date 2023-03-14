@@ -4,24 +4,35 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.nikita.doroshenko.japanmeeting.utils.Constants
+import com.nikita.doroshenko.japanmeeting.layouts.PatientLayout
+import com.nikita.doroshenko.japanmeeting.models.PatientModel
+import com.nikita.doroshenko.japanmeeting.services.PatientListService
+import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PatientsActivity : BaseActivity(){
 
 
     private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1
     private var picturePath: String? = null
-    private var isCheckedPregnant: Boolean = false
-    private var isCheckedDiabetic: Boolean = false
-    private var isCheckedAsthma: Boolean = false
-    private var isCheckedSenior: Boolean = false
+
+    private lateinit var patientListContent: LinearLayout
+
+    private lateinit var buttonBackToMenu: Button
+    private lateinit var buttonForwardToFinish: Button
+
+    private var retrofit = RetrofitClient.getClient()
+    private var patientListService = retrofit.create(PatientListService::class.java)
 
     private val storageResultLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -32,46 +43,12 @@ class PatientsActivity : BaseActivity(){
             }
         }
 
-    private lateinit var buttonPregnantIsChecked: Button
-    private lateinit var buttonPregnantPhone: Button
-    private lateinit var buttonPregnantDetails: Button
-
-    private lateinit var buttonDiabeticIsChecked: Button
-    private lateinit var buttonDiabeticPhone: Button
-    private lateinit var buttonDiabeticDetails: Button
-
-    private lateinit var buttonAsthmaIsChecked: Button
-    private lateinit var buttonAsthmaPhone: Button
-
-    private lateinit var buttonSeniorIsChecked: Button
-    private lateinit var buttonSeniorPhone: Button
-
-    private lateinit var buttonBackToMenu: Button
-    private lateinit var buttonForwardToFinish: Button
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patients)
 
-        buttonPregnantIsChecked = findViewById(R.id.btn_pregnant_is_checked)
-        buttonPregnantPhone = findViewById(R.id.btn_pregnant_phone)
-        buttonPregnantDetails = findViewById(R.id.btn_pregnant_details)
-
-        buttonDiabeticIsChecked = findViewById(R.id.btn_diabetic_is_checked)
-        buttonDiabeticPhone = findViewById(R.id.btn_diabetic_phone)
-        buttonDiabeticDetails = findViewById(R.id.btn_diabetic_details)
-
-        buttonAsthmaIsChecked = findViewById(R.id.btn_asthma_is_checked)
-        buttonAsthmaPhone = findViewById(R.id.btn_asthma_phone)
-
-        buttonSeniorIsChecked = findViewById(R.id.btn_senior_is_checked)
-        buttonSeniorPhone = findViewById(R.id.btn_senior_phone)
-
-        pregnantButtonListeners()
-        diabeticButtonListeners()
-        asthmaButtonListeners()
-        seniorButtonListeners()
+        patientListContent = findViewById(R.id.ll_patient_content)
 
         buttonBackToMenu = findViewById(R.id.btn_back_to_menu)
         buttonBackToMenu.setOnClickListener {
@@ -87,82 +64,40 @@ class PatientsActivity : BaseActivity(){
             startActivity(finishActivityIntent)
         }
 
+
+        patientListService.allPatients.enqueue(object: Callback<List<PatientModel>> {
+            override fun onResponse(call: Call<List<PatientModel>>, response: Response<List<PatientModel>>) {
+                val patientModels: List<PatientModel>? = response.body()
+                if (patientModels != null) {
+                    println(patientModels)
+                    Log.i("getPatients", "received ${patientModels.size} patient models")
+                    val patientsLayout: ArrayList<PatientLayout> = createPatients(patientModels)
+                }
+            }
+
+            override fun onFailure(call: Call<List<PatientModel>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
     }
 
-    private fun seniorButtonListeners() {
-        buttonSeniorIsChecked.setOnClickListener {
-            if (isCheckedSenior) {
-                buttonSeniorIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.unchecked_patient_background)
-                isCheckedSenior = false
-            } else {
-                buttonSeniorIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.checked_patient_background)
-                isCheckedSenior = true
-            }
+    private fun createPatients(patientModels: List<PatientModel>): ArrayList<PatientLayout> {
+        val patientsLayout = ArrayList<PatientLayout>()
+        for (patientModel in patientModels) {
+            val patientLayout = PatientLayout(this, patientModel.id, patientModel.isChecked, patientModel.patientStatus, patientModel.patientName,
+            patientModel.patientPhone, patientModel.patientAge, patientModel.patientType
+            )
+            patientListContent.addView(patientLayout)
+            patientsLayout.add(patientLayout)
         }
 
-        buttonSeniorPhone.setOnClickListener {
-//            MainPageActivity.instance.call(Constants.userName, Constants.userId)
-            Toast.makeText(this, "Temi is calling", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun asthmaButtonListeners() {
-        buttonAsthmaIsChecked.setOnClickListener {
-            if (isCheckedAsthma) {
-                buttonAsthmaIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.unchecked_patient_background)
-                isCheckedAsthma = false
-            } else {
-                buttonAsthmaIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.checked_patient_background)
-                isCheckedAsthma = true
-            }
-        }
 
-        buttonAsthmaPhone.setOnClickListener {
-//            MainPageActivity.instance.call(Constants.userName, Constants.userId)
-            Toast.makeText(this, "Temi is calling", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun diabeticButtonListeners() {
-        buttonDiabeticIsChecked.setOnClickListener {
-            if (isCheckedDiabetic) {
-                buttonDiabeticIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.unchecked_patient_background)
-                isCheckedDiabetic = false
-            } else {
-                buttonDiabeticIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.checked_patient_background)
-                isCheckedDiabetic = true
-            }
-        }
 
-        buttonDiabeticPhone.setOnClickListener {
-//            MainPageActivity.instance.call(Constants.userName, Constants.userId)
-            Toast.makeText(this, "Temi is calling", Toast.LENGTH_SHORT).show()
-        }
-
-        buttonDiabeticDetails.setOnClickListener {
-            runLikeActivity("/storage/emulated/0/Download/DiabeticDetails.png")
-        }
-    }
-
-    private fun pregnantButtonListeners() {
-        buttonPregnantIsChecked.setOnClickListener {
-            if (isCheckedPregnant) {
-                buttonPregnantIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.unchecked_patient_background)
-                isCheckedPregnant = false
-            } else {
-                buttonPregnantIsChecked.background = ActivityCompat.getDrawable(this, R.drawable.checked_patient_background)
-                isCheckedPregnant = true
-            }
-        }
-
-        buttonPregnantPhone.setOnClickListener {
-//            MainPageActivity.instance.call(Constants.userName, Constants.userId)
-            Toast.makeText(this, "Temi is calling", Toast.LENGTH_SHORT).show()
-        }
-
-        buttonPregnantDetails.setOnClickListener {
-            runLikeActivity("/storage/emulated/0/Download/PregnantDetails.png")
-        }
+        return patientsLayout
     }
 
     private fun startCustomerDetailsActivity() {

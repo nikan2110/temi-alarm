@@ -2,7 +2,7 @@ package com.nikita.doroshenko.japanmeeting.models;
 
 
 
-public class CheckListModel {
+public class CheckBoxModel {
     private String id;
     private String text;
     private boolean done;

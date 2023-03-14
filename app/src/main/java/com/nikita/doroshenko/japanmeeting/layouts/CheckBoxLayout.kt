@@ -1,4 +1,4 @@
-package com.nikita.doroshenko.japanmeeting.models
+package com.nikita.doroshenko.japanmeeting.layouts
 
 import android.content.Context
 import android.graphics.Color
@@ -9,14 +9,16 @@ import com.nikita.doroshenko.japanmeeting.R
 
 class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Boolean, tag: String) : RelativeLayout(context) {
 
-     val button = Button(context)
-     val checkBoxId = id
-     var checkIsDone = isDone
+    val button = Button(context)
+    val checkBoxId = id
+    var checkIsDone = isDone
 
 
     init {
         // Set layout parameters for the RelativeLayout
-        layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+            marginEnd= 16.dpToPx()
+        }
         // Create and add the Button to the RelativeLayout
         button.layoutParams = LayoutParams(128.dpToPx(), 128.dpToPx()).apply {
             setMargins(84.dpToPx(), 0, 0, 0)
