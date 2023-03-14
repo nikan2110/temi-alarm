@@ -72,8 +72,11 @@ class PatientsActivity : BaseActivity(){
                 progressBarPatientsList.visibility = View.GONE
                 val patientModels: List<PatientModel>? = response.body()
                 if (patientModels != null) {
+                    val patientModelsSorted = patientModels.sortedByDescending {
+                        it.patientStatus
+                    }
                     Log.i("getPatients", "received ${patientModels.size} patient models")
-                    val patientsLayout: ArrayList<PatientLayout> = createPatients(patientModels)
+                    val patientsLayout: ArrayList<PatientLayout> = createPatients(patientModelsSorted)
                     for (patientLayout in patientsLayout) {
                         patientLayout.buttonPatientIsChecked.setOnClickListener {
                             val body:HashMap<String, Boolean> = HashMap()
