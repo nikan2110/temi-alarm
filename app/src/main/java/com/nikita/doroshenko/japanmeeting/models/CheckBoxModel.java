@@ -6,41 +6,31 @@ public class CheckBoxModel {
     private String id;
     private String text;
     private boolean done;
-
     private String tag;
-
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
     public String getText() {
         return text;
     }
-
     public void setText(String text) {
         this.text = text;
     }
-
     public boolean done() {
         return done;
     }
-
     public void setDone(boolean done) {
         this.done = done;
     }
-
     public boolean isDone() {
         return done;
     }
-
     public String getTag() {
         return tag;
     }
-
     public void setTag(String tag) {
         this.tag = tag;
     }

@@ -42,7 +42,8 @@ class MainPageActivity : BaseActivity() {
 
         buttonTemiInstructions = findViewById(R.id.btn_instructions)
         buttonTemiInstructions.setOnClickListener {
-            Toast.makeText(this, Constants.TEMI_SPEECH, Toast.LENGTH_SHORT).show()
+            val instructionText = resources.getString(R.string.temi_instructions)
+            Toast.makeText(this, instructionText, Toast.LENGTH_SHORT).show()
 //            robotSpeak(Constants.TEMI_SPEECH, true)
         }
 

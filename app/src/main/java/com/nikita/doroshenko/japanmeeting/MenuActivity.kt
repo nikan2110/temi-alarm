@@ -3,10 +3,21 @@ package com.nikita.doroshenko.japanmeeting
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
+import com.nikita.doroshenko.japanmeeting.models.PatientModel
+import com.nikita.doroshenko.japanmeeting.services.CheckBoxListService
 import com.nikita.doroshenko.japanmeeting.services.MailService
+import com.nikita.doroshenko.japanmeeting.services.PatientListService
+import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
 
 class MenuActivity : BaseActivity() {
 
@@ -16,9 +27,18 @@ class MenuActivity : BaseActivity() {
     private lateinit var buttonPatients: Button
     private lateinit var buttonBackMainPage: Button
 
+    private var retrofit = RetrofitClient.getClient()
+    private var checkBoxListService = retrofit.create(CheckBoxListService::class.java)
+    private var patientListService = retrofit.create(PatientListService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
+        val language = Locale.getDefault().language
 
         mediaPlayer = MediaPlayer.create(this, R.raw.siren)
 
@@ -43,6 +63,41 @@ class MenuActivity : BaseActivity() {
             val mainPageActivityIntent = Intent(this@MenuActivity, destinationActivity)
             startActivity(mainPageActivityIntent)
         }
+
+        checkBoxListService.getAllCheckBoxesByLanguageAndStatus(language, false).enqueue(object: Callback<List<CheckBoxModel>>{
+            override fun onResponse(call: Call<List<CheckBoxModel>>, response: Response<List<CheckBoxModel>>) {
+                val checkBoxModels: List<CheckBoxModel>? = response.body()
+                if (checkBoxModels != null) {
+                    if (checkBoxModels.isEmpty()) {
+                        buttonCheckList.background = AppCompatResources.getDrawable(this@MenuActivity,R.drawable.check_list_button_green)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<CheckBoxModel>>, t: Throwable) {
+                val errorMessage = t.message
+                Log.e("getCheckListsFailureByLanguageAndStatus", "Error retrieving data from server: $errorMessage")
+            }
+
+        })
+
+        patientListService.getAllPatientsByStatus(false).enqueue(object: Callback<List<PatientModel>>{
+            override fun onResponse(call: Call<List<PatientModel>>, response: Response<List<PatientModel>>) {
+                val patientModels: List<PatientModel>? = response.body()
+                if (patientModels != null) {
+                    if (patientModels.isEmpty()) {
+                        buttonPatients.background = AppCompatResources.getDrawable(this@MenuActivity,R.drawable.patients_button_green)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<PatientModel>>, t: Throwable) {
+                val errorMessage = t.message
+                Log.e("getPatientsFailureByStatus", "Error retrieving data from server: $errorMessage")
+            }
+
+        })
+
 
         val mailChecker = Thread {
             while (true) {

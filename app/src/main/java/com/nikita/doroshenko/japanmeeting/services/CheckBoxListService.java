@@ -15,7 +15,10 @@ import retrofit2.http.Query;
 public interface CheckBoxListService {
 
     @GET("checkBoxes")
-    Call<List<CheckBoxModel>> getAllCheckBoxes(@Query("language") String language);
+    Call<List<CheckBoxModel>> getAllCheckBoxesByLanguage(@Query("language") String language);
+
+    @GET("checkBoxes/status")
+    Call<List<CheckBoxModel>> getAllCheckBoxesByLanguageAndStatus(@Query("language") String language, @Query("status") boolean status);
 
     @PATCH("checkBoxes/{checkBoxId}")
     Call<CheckBoxModel> updateCheckBoxStatus(@Path("checkBoxId") String checkBoxId, @Body Map<String, Boolean> checkBoxStatusUpdate);

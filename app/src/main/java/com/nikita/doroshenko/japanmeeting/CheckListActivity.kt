@@ -54,7 +54,7 @@ class CheckListActivity : BaseActivity() {
         }
 
 
-        checkBoxListService.getAllCheckBoxes(language).enqueue(object : Callback<List<CheckBoxModel>> {
+        checkBoxListService.getAllCheckBoxesByLanguage(language).enqueue(object : Callback<List<CheckBoxModel>> {
             override fun onResponse(call: Call<List<CheckBoxModel>>, response: Response<List<CheckBoxModel>>) {
                 progressBarCheckList.visibility = View.GONE
                 val checkBoxModels: List<CheckBoxModel>? = response.body()
@@ -82,7 +82,7 @@ class CheckListActivity : BaseActivity() {
             override fun onFailure(call: Call<List<CheckBoxModel>>, t: Throwable) {
                 progressBarCheckList.visibility = View.VISIBLE
                 val errorMessage = t.message
-                Log.e("getCheckListsFailure", "Error retrieving data from server: $errorMessage")
+                Log.e("getCheckListsFailureByLanguage", "Error retrieving data from server: $errorMessage")
             }
         })
 
