@@ -16,6 +16,7 @@ open class BaseActivity : AppCompatActivity() {
         var language = prefs.getString("language", "")
         // Set the default language to English if no language is set
         if (language!!.isEmpty()) {
+            Log.i("BaseActivity", "language is empty")
             language = "en"
         }
         if (language.equals("he") || language.equals("iw")) {

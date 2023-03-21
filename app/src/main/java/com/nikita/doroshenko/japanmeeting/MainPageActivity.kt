@@ -3,6 +3,7 @@ package com.nikita.doroshenko.japanmeeting
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.nikita.doroshenko.japanmeeting.utils.Constants
@@ -51,6 +52,7 @@ class MainPageActivity : BaseActivity() {
         buttonBackToLanguage.setOnClickListener {
             val destinationActivity = LanguageActivity::class.java
             val languageActivityIntent = Intent(this@MainPageActivity, destinationActivity)
+            removeLanguageFromSharedPreferences()
             startActivity(languageActivityIntent)
         }
 
@@ -92,5 +94,13 @@ class MainPageActivity : BaseActivity() {
 //        robotSpeak("Calling help", true)
 //        robot.startTelepresence(name, userId)
 //    }
+
+    private fun removeLanguageFromSharedPreferences() {
+        val prefs = getSharedPreferences("LanguagePreference", MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.remove("language")
+        Log.i("LanguageActivity", "language was removed")
+        editor.apply()
+    }
 
 }

@@ -3,13 +3,14 @@ package com.nikita.doroshenko.japanmeeting
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
 
-class LanguageActivity : AppCompatActivity() {
+class LanguageActivity : BaseActivity() {
 
     private lateinit var buttonRussian: ImageView
     private lateinit var buttonHebrew: ImageView
@@ -36,13 +37,12 @@ class LanguageActivity : AppCompatActivity() {
             openMainPage()
         }
 
-        removeLanguageFromSharedPreferences()
-
     }
 
     private fun openMainPage() {
         val destinationActivity = MainPageActivity::class.java
         val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
+        finish()
         startActivity(mainPageActivityIntent)
     }
 
@@ -63,13 +63,6 @@ class LanguageActivity : AppCompatActivity() {
         val destinationActivity = MainPageActivity::class.java
         val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
         startActivity(mainPageActivityIntent)
-    }
-
-    private fun removeLanguageFromSharedPreferences() {
-        val prefs = getSharedPreferences("LanguagePreference", MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.remove("language")
-        editor.apply()
     }
 
 
