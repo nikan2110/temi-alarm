@@ -101,7 +101,7 @@ class PatientsActivity : BaseActivity(){
                                     runLikeActivity("/storage/emulated/0/Download/PregnantDetails.png")
                                 }
                                 "Diabetic" -> {
-                                    runLikeActivity("/storage/emulated/0/Download/Diabetics.png")
+                                    runLikeActivity("/storage/emulated/0/Download/DiabeticDetails.png")
                                 }
 
                             }

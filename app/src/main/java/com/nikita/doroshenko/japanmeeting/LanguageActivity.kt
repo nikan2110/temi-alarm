@@ -3,10 +3,12 @@ package com.nikita.doroshenko.japanmeeting
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
+import kotlin.system.exitProcess
 
 
 class LanguageActivity : AppCompatActivity() {
@@ -14,6 +16,7 @@ class LanguageActivity : AppCompatActivity() {
     private lateinit var buttonRussian: ImageView
     private lateinit var buttonHebrew: ImageView
     private lateinit var buttonEnglish: ImageView
+    private lateinit var buttonHide: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,13 @@ class LanguageActivity : AppCompatActivity() {
         buttonEnglish = findViewById(R.id.btn_english)
         buttonEnglish.setOnClickListener {
             openMainPage()
+        }
+
+        buttonHide = findViewById(R.id.btn_hide)
+        buttonHide.setOnLongClickListener {
+            finishAffinity()
+            System.exit(0);
+            true
         }
 
         removeLanguageFromSharedPreferences()
