@@ -34,6 +34,7 @@ class LanguageActivity : BaseActivity() {
 
         buttonEnglish = findViewById(R.id.btn_english)
         buttonEnglish.setOnClickListener {
+            setLocale(Locale("en"))
             openMainPage()
         }
 
