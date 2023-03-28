@@ -2,6 +2,7 @@ package com.nikita.doroshenko.japanmeeting.layouts
 
 import android.content.Context
 import android.graphics.Color
+import android.text.method.ScrollingMovementMethod
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
@@ -90,6 +91,8 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
         textView.setTextSize(25f)
         textView.setTypeface(ResourcesCompat.getFont(context, R.font.assistant_semibold))
         textView.setLineSpacing(8.dpToPx().toFloat(), 1f)
+        textView.movementMethod = ScrollingMovementMethod()
+
         linearLayout.addView(textView)
     }
 
