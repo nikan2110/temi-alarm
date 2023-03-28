@@ -57,6 +57,7 @@ class MainPageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
         buttonBackToLanguage.setOnClickListener {
             val destinationActivity = LanguageActivity::class.java
             val languageActivityIntent = Intent(this@MainPageActivity, destinationActivity)
+            removeLanguageFromSharedPreferences()
             startActivity(languageActivityIntent)
         }
 
@@ -110,6 +111,13 @@ class MainPageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
         if (state == 3) {
             robotSpeak("Hello, how can I help you?", false, "en")
         }
+    }
+
+    private fun removeLanguageFromSharedPreferences() {
+        val prefs = getSharedPreferences("LanguagePreference", MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.remove("language")
+        editor.apply()
     }
 
 }

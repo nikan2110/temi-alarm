@@ -11,7 +11,7 @@ import java.util.*
 import kotlin.system.exitProcess
 
 
-class LanguageActivity : AppCompatActivity() {
+class LanguageActivity : BaseActivity() {
 
     private lateinit var buttonRussian: ImageView
     private lateinit var buttonHebrew: ImageView
@@ -46,13 +46,14 @@ class LanguageActivity : AppCompatActivity() {
             true
         }
 
-        removeLanguageFromSharedPreferences()
+
 
     }
 
     private fun openMainPage() {
         val destinationActivity = MainPageActivity::class.java
         val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
+        finish()
         startActivity(mainPageActivityIntent)
     }
 
@@ -75,12 +76,7 @@ class LanguageActivity : AppCompatActivity() {
         startActivity(mainPageActivityIntent)
     }
 
-    private fun removeLanguageFromSharedPreferences() {
-        val prefs = getSharedPreferences("LanguagePreference", MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.remove("language")
-        editor.apply()
-    }
+
 
 
 }
