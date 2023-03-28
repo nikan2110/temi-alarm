@@ -56,11 +56,13 @@
         android:indeterminateTint="@color/orange_transparent_80percent" />
 
 
-
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/ll_check_box_content"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -206,6 +208,8 @@
 <!--        </RelativeLayout>-->
 
     </LinearLayout>
+
+    </HorizontalScrollView>
 
     <RelativeLayout
         android:id="@+id/footer_check_list"
