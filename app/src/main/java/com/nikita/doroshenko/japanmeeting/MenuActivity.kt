@@ -5,7 +5,9 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
@@ -27,6 +29,8 @@ class MenuActivity : BaseActivity() {
     private lateinit var buttonPatients: Button
     private lateinit var buttonBackMainPage: Button
 
+    private lateinit var progressBarMenu: ProgressBar
+
     private var retrofit = RetrofitClient.getClient()
     private var checkBoxListService = retrofit.create(CheckBoxListService::class.java)
     private var patientListService = retrofit.create(PatientListService::class.java)
@@ -41,6 +45,8 @@ class MenuActivity : BaseActivity() {
         val language = Locale.getDefault().language
 
         mediaPlayer = MediaPlayer.create(this, R.raw.siren)
+
+        progressBarMenu = findViewById(R.id.pb_main_menu)
 
         buttonCheckList = findViewById(R.id.btn_check_list)
         buttonPatients = findViewById(R.id.btn_patients)
@@ -66,6 +72,8 @@ class MenuActivity : BaseActivity() {
 
         checkBoxListService.getAllCheckBoxesByLanguageAndStatus(language, false).enqueue(object: Callback<List<CheckBoxModel>>{
             override fun onResponse(call: Call<List<CheckBoxModel>>, response: Response<List<CheckBoxModel>>) {
+                buttonCheckList.visibility = View.VISIBLE
+                progressBarMenu.visibility = View.GONE
                 val checkBoxModels: List<CheckBoxModel>? = response.body()
                 if (checkBoxModels != null) {
                     if (checkBoxModels.isEmpty()) {
@@ -83,6 +91,8 @@ class MenuActivity : BaseActivity() {
 
         patientListService.getAllPatientsByStatus(false).enqueue(object: Callback<List<PatientModel>>{
             override fun onResponse(call: Call<List<PatientModel>>, response: Response<List<PatientModel>>) {
+                buttonPatients.visibility = View.VISIBLE
+                progressBarMenu.visibility = View.GONE
                 val patientModels: List<PatientModel>? = response.body()
                 if (patientModels != null) {
                     if (patientModels.isEmpty()) {
