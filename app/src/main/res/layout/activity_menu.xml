@@ -44,6 +44,17 @@
 
     </LinearLayout>
 
+
+    <ProgressBar
+        android:id="@+id/pb_main_menu"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:visibility="visible"
+        android:indeterminateTint="@color/orange_transparent_80percent" />
+
     <LinearLayout
         android:id="@+id/ll_check_list_and_patients_content"
         android:layout_width="match_parent"
@@ -51,14 +62,14 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-
-            <Button
+        <Button
                 android:id="@+id/btn_check_list"
                 android:layout_width="364dp"
                 android:layout_height="364dp"
                 android:layout_marginEnd="124dp"
                 android:layout_gravity="center|center_horizontal"
                 android:background="@drawable/check_list_button"
+                android:visibility="gone"
                 android:foreground="?android:attr/selectableItemBackground" />
 
 
@@ -68,6 +79,7 @@
                 android:layout_height="364dp"
                 android:layout_gravity="center|center_horizontal"
                 android:background="@drawable/patients_button"
+                android:visibility="gone"
                 android:foreground="?android:attr/selectableItemBackground" />
 
     </LinearLayout>
