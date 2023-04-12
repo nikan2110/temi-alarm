@@ -49,7 +49,6 @@ class MainPageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
         buttonTemiInstructions = findViewById(R.id.btn_instructions)
         buttonTemiInstructions.setOnClickListener {
             val instructionText = resources.getString(R.string.temi_instructions)
-//            Toast.makeText(this, instructionText, Toast.LENGTH_SHORT).show()
             robotSpeak(instructionText, true, language)
         }
 
@@ -67,11 +66,13 @@ class MainPageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
     override fun onStart() {
         super.onStart()
         robot.addOnRobotReadyListener(this)
+        robot.addOnGreetModeStateChangedListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         robot.removeOnRobotReadyListener(this)
+        robot.removeOnGreetModeStateChangedListener(this)
     }
 
     override fun onRobotReady(isReady: Boolean) {
