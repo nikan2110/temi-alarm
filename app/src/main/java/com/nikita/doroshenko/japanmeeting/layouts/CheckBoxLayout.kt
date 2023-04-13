@@ -97,4 +97,8 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
 
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
 
+    override fun toString(): String {
+        return "CheckBoxLayout: ${checkIsDone}"
+    }
+
 }

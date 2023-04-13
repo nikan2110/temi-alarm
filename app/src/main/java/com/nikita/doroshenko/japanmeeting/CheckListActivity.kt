@@ -59,8 +59,11 @@ class CheckListActivity : BaseActivity() {
                 progressBarCheckList.visibility = View.GONE
                 val checkBoxModels: List<CheckBoxModel>? = response.body()
                 if (checkBoxModels != null) {
+                    val checkBoxModelsSorted = checkBoxModels.sortedBy {
+                        it.isDone
+                    }
                     Log.i("getCheckLists", "received ${checkBoxModels.size} checkLists models")
-                    val checkBoxLayouts: ArrayList<CheckBoxLayout> = createCheckBoxes(checkBoxModels)
+                    val checkBoxLayouts: ArrayList<CheckBoxLayout> = createCheckBoxes(checkBoxModelsSorted)
                     for (checkBoxLayout in checkBoxLayouts){
                         checkBoxLayout.button.setOnClickListener {
                             val body:HashMap<String, Boolean> = HashMap()
