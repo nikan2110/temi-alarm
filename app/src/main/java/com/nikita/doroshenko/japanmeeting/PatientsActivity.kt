@@ -72,8 +72,11 @@ class PatientsActivity : BaseActivity(){
                 progressBarPatientsList.visibility = View.GONE
                 val patientModels: List<PatientModel>? = response.body()
                 if (patientModels != null) {
-                    val patientModelsSorted = patientModels.sortedByDescending {
+                    var patientModelsSorted = patientModels.sortedByDescending {
                         it.patientStatus
+                    }
+                    patientModelsSorted = patientModelsSorted.sortedBy {
+                        it.isChecked
                     }
                     Log.i("getPatients", "received ${patientModels.size} patient models")
                     val patientsLayout: ArrayList<PatientLayout> = createPatients(patientModelsSorted)

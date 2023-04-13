@@ -60,7 +60,10 @@ class CheckListActivity : BaseActivity() {
                 val checkBoxModels: List<CheckBoxModel>? = response.body()
                 if (checkBoxModels != null) {
                     Log.i("getCheckLists", "received ${checkBoxModels.size} checkLists models")
-                    val checkBoxLayouts: ArrayList<CheckBoxLayout> = createCheckBoxes(checkBoxModels)
+                    val checkBoxModelsSorted = checkBoxModels.sortedBy {
+                        it.isDone
+                    }
+                    val checkBoxLayouts: ArrayList<CheckBoxLayout> = createCheckBoxes(checkBoxModelsSorted)
                     for (checkBoxLayout in checkBoxLayouts){
                         checkBoxLayout.button.setOnClickListener {
                             val body:HashMap<String, Boolean> = HashMap()
