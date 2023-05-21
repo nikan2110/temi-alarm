@@ -8,7 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import com.nikita.doroshenko.japanmeeting.R
 
-class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Boolean, tag: String) : RelativeLayout(context) {
+class CheckBoxLayout(context: Context, val checkBoxText: String, id:String, isDone:Boolean, tag: String) : RelativeLayout(context) {
 
     val button = Button(context)
     val checkBoxId = id

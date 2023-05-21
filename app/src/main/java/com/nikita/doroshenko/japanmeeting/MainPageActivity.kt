@@ -62,7 +62,6 @@ class MainPageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
 
     }
 
-
     override fun onStart() {
         super.onStart()
         robot.addOnRobotReadyListener(this)
