@@ -134,7 +134,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                         if (isCheckingStart) {
                             if (checkBoxLayoutsUnchecked.isNotEmpty()) {
                                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
-                                robot.askQuestion("Did you ${text}?")
+                                robot.askQuestion(" אתֿה עשה ${text}?")
                             } else {
                                 robotSpeak("You checked all tasks", true, language)
                                 isCheckingStart = false
@@ -191,7 +191,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
         for (checkListModel in checkBoxModels) {
             val checkBoxLayout = CheckBoxLayout(
                 this,
-                checkListModel.text,
+                checkListModel.shortDescription,
                 checkListModel.id,
                 checkListModel.done(),
                 checkListModel.tag
@@ -283,18 +283,18 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
             return
         }
         when {
-            asrResult.equals("start check", ignoreCase = true) -> {
+            asrResult.equals("שלום", ignoreCase = true) -> {
                 isCheckingStart = true
                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
-                robot.askQuestion("Did you ${text}?")
+                robot.askQuestion(" אתֿה עשה ${text}?")
             }
-            asrResult.equals("yes", ignoreCase = true) -> {
+            asrResult.equals("כן", ignoreCase = true) -> {
                 val body: HashMap<String, Boolean> = HashMap()
                 body["checkBoxStatusUpdate"] = true
                 changeStatusRequest(checkBoxLayoutsUnchecked[0], body)
             }
-            asrResult.equals("no", ignoreCase = true) -> {
-                robotSpeak("Please complete task and return to me", true, language)
+            asrResult.equals("לא", ignoreCase = true) -> {
+                robotSpeak("אנא השלם את המשימה וחזור אלי", true, language)
                 isCheckingStart = false
             }
         }
