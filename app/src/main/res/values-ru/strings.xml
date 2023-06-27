@@ -20,4 +20,9 @@
         При тревоге не пользуйтесь лифтом.
         Вы должны войти в бомбоубежище в течение минуты.
         Оставайтесь в нём в течение 10 минут.</string>
+    <string name="temi_ask_about_tasks_first_part">
+    У вас есть
+    </string>
+    <string name="temi_ask_about_tasks_second_part">
+   не решенных задач. Чтобы проверить их вместе с Теми, скажите Привет</string>
 </resources>

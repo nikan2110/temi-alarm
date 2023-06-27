@@ -15,7 +15,7 @@ import com.nikita.doroshenko.japanmeeting.models.PatientModel
 import com.nikita.doroshenko.japanmeeting.services.CheckBoxListService
 import com.nikita.doroshenko.japanmeeting.services.MailService
 import com.nikita.doroshenko.japanmeeting.services.PatientListService
-import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
+import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientTemiServer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +31,7 @@ class MenuActivity : BaseActivity() {
 
     private lateinit var progressBarMenu: ProgressBar
 
-    private var retrofit = RetrofitClient.getClient()
+    private var retrofit = RetrofitClientTemiServer.getClient()
     private var checkBoxListService = retrofit.create(CheckBoxListService::class.java)
     private var patientListService = retrofit.create(PatientListService::class.java)
 

@@ -14,13 +14,13 @@ import retrofit2.http.Query;
 
 public interface CheckBoxListService {
 
-    @GET("checkBoxes")
+    @GET("temi/checkBoxes")
     Call<List<CheckBoxModel>> getAllCheckBoxesByLanguage(@Query("language") String language);
 
-    @GET("checkBoxes/status")
+    @GET("temi/checkBoxes/status")
     Call<List<CheckBoxModel>> getAllCheckBoxesByLanguageAndStatus(@Query("language") String language, @Query("status") boolean status);
 
-    @PATCH("checkBoxes/{checkBoxId}")
+    @PATCH("temi/checkBoxes/{checkBoxId}")
     Call<CheckBoxModel> updateCheckBoxStatus(@Path("checkBoxId") String checkBoxId, @Body Map<String, Boolean> checkBoxStatusUpdate);
 
 }

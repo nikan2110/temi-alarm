@@ -23,5 +23,11 @@
             When alarming, do not use the elevator.
             You must enter the protected space within a minute.
             Stay in the protected space for 10 minutes.</string>
+    <string name="temi_ask_about_tasks_first_part">
+        You have
+    </string>
+    <string name="temi_ask_about_tasks_second_part">
+        not solve tasks. If you want to check it with Temi, say START CHECK
+    </string>
 
 </resources>

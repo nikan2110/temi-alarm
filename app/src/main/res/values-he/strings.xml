@@ -20,4 +20,9 @@
             כאשר מדאיגים, אל תשתמש במעלית.
             עליך להיכנס למרחב המוגן תוך דקה.
             הישארו במרחב המוגן למשך 10 דקות.</string>
+    <string name="temi_ask_about_tasks_first_part">
+    נשארו לך
+    </string>
+    <string name="temi_ask_about_tasks_second_part">
+     משימות פתוחות. האם אתה רוצה לבדוק את זה עם Temi,בבקשה תגיד ״שלום״</string>
 </resources>

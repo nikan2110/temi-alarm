@@ -15,12 +15,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.nikita.doroshenko.japanmeeting.layouts.CheckBoxLayout
 import com.nikita.doroshenko.japanmeeting.layouts.PatientLayout
-import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
 import com.nikita.doroshenko.japanmeeting.models.PatientModel
 import com.nikita.doroshenko.japanmeeting.services.PatientListService
-import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
+import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientTemiServer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +35,7 @@ class PatientsActivity : BaseActivity(){
 
     private lateinit var buttonBackToMenu: Button
 
-    private var retrofit = RetrofitClient.getClient()
+    private var retrofit = RetrofitClientTemiServer.getClient()
     private var patientListService = retrofit.create(PatientListService::class.java)
 
     private val storageResultLauncher: ActivityResultLauncher<String> =

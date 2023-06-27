@@ -11,11 +11,15 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import com.nikita.doroshenko.japanmeeting.layouts.CheckBoxLayout
+import com.nikita.doroshenko.japanmeeting.models.ChatGPTAnswerModel
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
+import com.nikita.doroshenko.japanmeeting.services.ChatGptService
 import com.nikita.doroshenko.japanmeeting.services.CheckBoxListService
-import com.nikita.doroshenko.japanmeeting.utils.RetrofitClient
+import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientChatGPTServer
+import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientTemiServer
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.constants.SdkConstants
@@ -24,6 +28,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.HashMap
 
 class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener {
 
@@ -40,8 +45,11 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
 
     private var checkBoxLayoutsUnchecked: List<CheckBoxLayout> = ArrayList<CheckBoxLayout>()
 
-    private var retrofit = RetrofitClient.getClient()
-    private var checkBoxListService = retrofit.create(CheckBoxListService::class.java)
+    private var retrofitTemiServer = RetrofitClientTemiServer.getClient()
+    private var retrofitChatGPTServer = RetrofitClientChatGPTServer.getClient()
+
+    private var checkBoxListService = retrofitTemiServer.create(CheckBoxListService::class.java)
+    private var chatGPTService = retrofitChatGPTServer.create(ChatGptService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +78,10 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
         buttonTemiInteraction = findViewById(R.id.btn_temi_interaction)
         buttonTemiInteraction.setOnClickListener {
             if (checkBoxLayoutsUnchecked.isNotEmpty()) {
+                val instructionTextFirstPart = resources.getString(R.string.temi_ask_about_tasks_first_part)
+                val instructionTextSecondPart = resources.getString(R.string.temi_ask_about_tasks_second_part)
                 robot.askQuestion(
-                    "You have ${checkBoxLayoutsUnchecked.size} not solve tasks. " +
-                            "If you wanna check it with Temi, say 'START CHECK'"
+                    " $instructionTextFirstPart ${checkBoxLayoutsUnchecked.size} $instructionTextSecondPart"
                 )
             } else {
                 robotSpeak("You checked all tasks", true, language)
@@ -286,7 +295,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
             asrResult.equals("שלום", ignoreCase = true) -> {
                 isCheckingStart = true
                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
-                robot.askQuestion(" אתֿה עשה ${text}?")
+                robot.askQuestion(" האם בוצע - ${text}?")
             }
             asrResult.equals("כן", ignoreCase = true) -> {
                 val body: HashMap<String, Boolean> = HashMap()
@@ -297,7 +306,37 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                 robotSpeak("אנא השלם את המשימה וחזור אלי", true, language)
                 isCheckingStart = false
             }
+            asrResult.startsWith("תגידי לי", ignoreCase = true) -> {
+                val question = asrResult.drop(8)
+                val body: HashMap<String, String> = HashMap()
+                body["question"] = question
+                // TODO (add checking, question not should be empty, if empty, don't send request)
+                robotSpeak("אני חושבת ...", true, language)
+                sendQuestion(body)
+
+            }
         }
+    }
+
+    private fun sendQuestion(body: HashMap<String, String>) {
+        chatGPTService.askQuestion(body).enqueue(object: Callback<ChatGPTAnswerModel> {
+            override fun onResponse(
+                call: Call<ChatGPTAnswerModel>,
+                response: Response<ChatGPTAnswerModel>
+            ) {
+                val answerChatGPT: ChatGPTAnswerModel? = response.body()
+                if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
+                    robot.askQuestion(answerChatGPT.answer + "אני עדיין יכולה לעזור לך ?")
+                } else {
+                    robot.askQuestion("לא הצלחתי למצוא שום דבר. אני עדיין יכולה לעזור לך ?")
+                }
+            }
+
+            override fun onFailure(call: Call<ChatGPTAnswerModel>, t: Throwable) {
+                Toast.makeText(this@CheckListActivity, "Something wrong with server", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
 }

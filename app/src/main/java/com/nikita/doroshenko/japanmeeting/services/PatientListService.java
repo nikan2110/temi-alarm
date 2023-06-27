@@ -15,13 +15,13 @@ import retrofit2.http.Query;
 
 public interface PatientListService {
 
-    @GET("patients")
+    @GET("temi/patients")
     Call<List<PatientModel>> getAllPatients();
 
-    @GET("patients/status")
+    @GET("temi/patients/status")
     Call<List<PatientModel>> getAllPatientsByStatus(@Query("status") boolean status);
 
-    @PATCH("patients/{patientId}")
+    @PATCH("temi/patients/{patientId}")
     Call<PatientModel> updatePatientStatus(@Path("patientId") String patientId, @Body Map<String, Boolean> patientStatusUpdate);
 
 }
