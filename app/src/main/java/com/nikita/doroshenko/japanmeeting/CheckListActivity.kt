@@ -2,11 +2,9 @@ package com.nikita.doroshenko.japanmeeting
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -18,8 +16,8 @@ import com.nikita.doroshenko.japanmeeting.models.ChatGPTAnswerModel
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
 import com.nikita.doroshenko.japanmeeting.services.ChatGptService
 import com.nikita.doroshenko.japanmeeting.services.CheckBoxListService
-import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientChatGPTServer
-import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientTemiServer
+import com.nikita.doroshenko.japanmeeting.services.RetrofitClientChatGPTServer
+import com.nikita.doroshenko.japanmeeting.services.RetrofitClientTemiServer
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.constants.SdkConstants
@@ -92,12 +90,8 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
     }
 
     private fun getAllCheckBoxesByLanguage(language: String) {
-        checkBoxListService.getAllCheckBoxesByLanguage(language)
-            .enqueue(object : Callback<List<CheckBoxModel>> {
-                override fun onResponse(
-                    call: Call<List<CheckBoxModel>>,
-                    response: Response<List<CheckBoxModel>>
-                ) {
+        checkBoxListService.getAllCheckBoxesByLanguage(language).enqueue(object : Callback<List<CheckBoxModel>> {
+                override fun onResponse(call: Call<List<CheckBoxModel>>, response: Response<List<CheckBoxModel>>) {
                     progressBarCheckList.visibility = View.GONE
                     val checkBoxModels: List<CheckBoxModel>? = response.body()
                     if (checkBoxModels != null) {
@@ -119,19 +113,11 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                             checkBoxLayout.button.setOnClickListener {
                                 val body: HashMap<String, Boolean> = HashMap()
                                 if (checkBoxLayout.checkIsDone) {
-                                    checkBoxLayout.button.background =
-                                        AppCompatResources.getDrawable(
-                                            this@CheckListActivity,
-                                            R.drawable.unchecked_box_background
-                                        )
+                                    checkBoxLayout.button.background = AppCompatResources.getDrawable(this@CheckListActivity, R.drawable.unchecked_box_background)
                                     body["checkBoxStatusUpdate"] = false
                                     changeStatusRequest(checkBoxLayout, body)
                                 } else {
-                                    checkBoxLayout.button.background =
-                                        AppCompatResources.getDrawable(
-                                            this@CheckListActivity,
-                                            R.drawable.checked_box_background
-                                        )
+                                    checkBoxLayout.button.background = AppCompatResources.getDrawable(this@CheckListActivity, R.drawable.checked_box_background)
                                     body["checkBoxStatusUpdate"] = true
                                     changeStatusRequest(checkBoxLayout, body)
                                 }
@@ -157,24 +143,15 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                 override fun onFailure(call: Call<List<CheckBoxModel>>, t: Throwable) {
                     progressBarCheckList.visibility = View.VISIBLE
                     val errorMessage = t.message
-                    Log.e(
-                        "getCheckListsFailureByLanguage",
-                        "Error retrieving data from server: $errorMessage"
-                    )
+                    Log.e("getCheckListsFailureByLanguage", "Error retrieving data from server: $errorMessage")
                 }
             })
     }
 
-    private fun changeStatusRequest(
-        checkBoxLayout: CheckBoxLayout,
-        body: HashMap<String, Boolean>
-    ) {
+    private fun changeStatusRequest(checkBoxLayout: CheckBoxLayout, body: HashMap<String, Boolean>) {
         checkBoxListService.updateCheckBoxStatus(checkBoxLayout.checkBoxId, body)
             .enqueue(object : Callback<CheckBoxModel> {
-                override fun onResponse(
-                    call: Call<CheckBoxModel>,
-                    response: Response<CheckBoxModel>
-                ) {
+                override fun onResponse(call: Call<CheckBoxModel>, response: Response<CheckBoxModel>) {
                     val checkBoxModel: CheckBoxModel? = response.body()
                     if (checkBoxModel != null) {
                         Log.i("changedStatus", "changed status to ${checkBoxModel.done()} ")
@@ -183,72 +160,53 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                         getAllCheckBoxesByLanguage(language)
                     }
                 }
-
                 override fun onFailure(call: Call<CheckBoxModel>, t: Throwable) {
                     val errorMessage = t.message
-                    Log.e(
-                        "changedStatusFailure",
-                        "Error retrieving data from server: $errorMessage"
-                    )
+                    Log.e("changedStatusFailure", "Error retrieving data from server: $errorMessage")
                 }
-
             })
+    }
+
+    private fun sendQuestion(body: HashMap<String, String>) {
+        chatGPTService.askQuestion(body).enqueue(object: Callback<ChatGPTAnswerModel> {
+            override fun onResponse(call: Call<ChatGPTAnswerModel>, response: Response<ChatGPTAnswerModel>) {
+                val answerChatGPT: ChatGPTAnswerModel? = response.body()
+                if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
+                    robot.askQuestion(answerChatGPT.answer + "אני עדיין יכולה לעזור לך ?")
+                } else {
+                    robot.askQuestion("לא הצלחתי למצוא שום דבר. אני עדיין יכולה לעזור לך ?")
+                }
+            }
+
+            override fun onFailure(call: Call<ChatGPTAnswerModel>, t: Throwable) {
+                Toast.makeText(this@CheckListActivity, "Something wrong with server", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun createCheckBoxes(checkBoxModels: List<CheckBoxModel>): ArrayList<CheckBoxLayout> {
         val checkBoxesLayout = ArrayList<CheckBoxLayout>()
         for (checkListModel in checkBoxModels) {
             val checkBoxLayout = CheckBoxLayout(
-                this,
-                checkListModel.shortDescription,
-                checkListModel.id,
-                checkListModel.done(),
-                checkListModel.tag
-            )
-//            val layoutParams = RelativeLayout.LayoutParams(
-//                RelativeLayout.LayoutParams.WRAP_CONTENT,
-//                RelativeLayout.LayoutParams.WRAP_CONTENT
-//            )
-//            layoutParams.marginEnd= 16.dpToPx()
+                this, checkListModel.shortDescription, checkListModel.id, checkListModel.done(), checkListModel.tag)
             checkBoxContent.addView(checkBoxLayout)
             checkBoxesLayout.add(checkBoxLayout)
         }
         return checkBoxesLayout
     }
 
-    private fun Int.dpToPx(): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            Resources.getSystem().displayMetrics
-        ).toInt()
-    }
 
     private fun robotSpeak(text: String, showConversationLayer: Boolean, language: String) {
         when (language) {
             "iw" -> {
-                robot.speak(
-                    TtsRequest.create(
-                        text, isShowOnConversationLayer = showConversationLayer,
-                        TtsRequest.Language.HE_IL
-                    )
-                )
+                robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, TtsRequest.Language.HE_IL))
             }
             "ru" -> {
-                robot.speak(
-                    TtsRequest.create(
-                        text, isShowOnConversationLayer = showConversationLayer,
-                        TtsRequest.Language.RU_RU
-                    )
-                )
+                robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, TtsRequest.Language.RU_RU))
             }
             "en" -> {
-                robot.speak(
-                    TtsRequest.create(
-                        text, isShowOnConversationLayer = showConversationLayer,
-                        TtsRequest.Language.EN_US
-                    )
-                )
+                robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, TtsRequest.Language.EN_US))
             }
         }
     }
@@ -278,9 +236,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
     override fun onAsrResult(asrResult: String) {
         Log.i("AsrResult", "Received asrResult: $asrResult")
         try {
-            val metadata = packageManager
-                .getApplicationInfo(packageName, PackageManager.GET_META_DATA).metaData
-                ?: return
+            val metadata = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).metaData ?: return
             if (!robot.isSelectedKioskApp()) {
                 return
             }
@@ -317,28 +273,6 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
             }
         }
     }
-
-    private fun sendQuestion(body: HashMap<String, String>) {
-        chatGPTService.askQuestion(body).enqueue(object: Callback<ChatGPTAnswerModel> {
-            override fun onResponse(
-                call: Call<ChatGPTAnswerModel>,
-                response: Response<ChatGPTAnswerModel>
-            ) {
-                val answerChatGPT: ChatGPTAnswerModel? = response.body()
-                if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
-                    robot.askQuestion(answerChatGPT.answer + "אני עדיין יכולה לעזור לך ?")
-                } else {
-                    robot.askQuestion("לא הצלחתי למצוא שום דבר. אני עדיין יכולה לעזור לך ?")
-                }
-            }
-
-            override fun onFailure(call: Call<ChatGPTAnswerModel>, t: Throwable) {
-                Toast.makeText(this@CheckListActivity, "Something wrong with server", Toast.LENGTH_SHORT).show()
-            }
-
-        })
-    }
-
 }
 
 

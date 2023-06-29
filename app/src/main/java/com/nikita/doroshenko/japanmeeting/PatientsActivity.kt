@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import com.nikita.doroshenko.japanmeeting.layouts.PatientLayout
 import com.nikita.doroshenko.japanmeeting.models.PatientModel
 import com.nikita.doroshenko.japanmeeting.services.PatientListService
-import com.nikita.doroshenko.japanmeeting.utils.RetrofitClientTemiServer
+import com.nikita.doroshenko.japanmeeting.services.RetrofitClientTemiServer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

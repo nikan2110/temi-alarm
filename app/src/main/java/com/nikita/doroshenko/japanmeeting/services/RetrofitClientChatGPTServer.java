@@ -1,4 +1,4 @@
-package com.nikita.doroshenko.japanmeeting.utils;
+package com.nikita.doroshenko.japanmeeting.services;
 
 import java.util.concurrent.TimeUnit;
 
