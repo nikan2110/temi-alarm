@@ -16,12 +16,18 @@
     <string name="choose_a_language_ru" translatable="false">Выберите язык</string>
     <string name="choose_a_language_he" translatable="false">בחר שפה</string>
     <string name="temi_instructions">
-            Good morning to all the staff
+            Good morning to all the staff!
             We are making a transition from routine to emergency.
             Missile fire is expected in the coming hours.
             Everyone should make sure that they know where the nearest protected space is.
             When alarming, do not use the elevator.
             You must enter the protected space within a minute.
             Stay in the protected space for 10 minutes.</string>
+    <string name="temi_ask_about_tasks_first_part">
+        You have
+    </string>
+    <string name="temi_ask_about_tasks_second_part">
+        not solve tasks. If you want to check it with Temi, say START CHECK
+    </string>
 
 </resources>

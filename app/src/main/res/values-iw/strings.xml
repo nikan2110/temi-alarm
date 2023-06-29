@@ -13,11 +13,16 @@
     <string name="check_list">בדוק רשימה</string>
     <string name="patient_in_risk">חולים בסיכון</string>
     <string name="temi_instructions">
-בוקר טוב לכל הצוות
+בוקר טוב לכל! הצוות
             אנחנו עושים מעבר משגרה לחירום.
             ירי טילים צפוי בשעות הקרובות.
             כל אחד צריך לוודא שהוא יודע היכן נמצא המרחב המוגן הקרוב ביותר.
             כאשר מדאיגים, אל תשתמש במעלית.
             עליך להיכנס למרחב המוגן תוך דקה.
             הישארו במרחב המוגן למשך 10 דקות.</string>
+    <string name="temi_ask_about_tasks_first_part">
+    נשארו לך
+    </string>
+    <string name="temi_ask_about_tasks_second_part">
+     משימות פתוחות. האם אתה רוצה לבדוק את זה עם Temi,בבקשה תגיד ״שלום״</string>
 </resources>

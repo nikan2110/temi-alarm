@@ -8,7 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import com.nikita.doroshenko.japanmeeting.R
 
-class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Boolean, tag: String) : RelativeLayout(context) {
+class CheckBoxLayout(context: Context, val checkBoxText: String, id:String, isDone:Boolean, tag: String) : RelativeLayout(context) {
 
     val button = Button(context)
     val checkBoxId = id
@@ -92,10 +92,13 @@ class CheckBoxLayout(context: Context, checkBoxText:String, id:String, isDone:Bo
         textView.setTypeface(ResourcesCompat.getFont(context, R.font.assistant_semibold))
         textView.setLineSpacing(8.dpToPx().toFloat(), 1f)
         textView.movementMethod = ScrollingMovementMethod()
-
         linearLayout.addView(textView)
     }
 
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
+
+    override fun toString(): String {
+        return "CheckBoxLayout: ${checkIsDone}"
+    }
 
 }

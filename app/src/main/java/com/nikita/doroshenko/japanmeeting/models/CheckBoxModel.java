@@ -7,6 +7,7 @@ public class CheckBoxModel {
     private String text;
     private boolean done;
     private String tag;
+    private String shortDescription;
     public String getId() {
         return id;
     }
@@ -35,13 +36,23 @@ public class CheckBoxModel {
         this.tag = tag;
     }
 
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+
     @Override
     public String toString() {
-        return "CheckListModel{" +
+        return "CheckBoxModel{" +
                 "id='" + id + '\'' +
                 ", text='" + text + '\'' +
                 ", done=" + done +
                 ", tag='" + tag + '\'' +
+                ", shortDescription='" + shortDescription + '\'' +
                 '}';
     }
 }
