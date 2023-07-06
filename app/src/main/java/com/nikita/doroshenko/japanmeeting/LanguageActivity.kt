@@ -5,15 +5,12 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.listeners.OnGreetModeStateChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import java.util.*
-import kotlin.system.exitProcess
 
 
 class LanguageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateChangedListener {
@@ -33,19 +30,19 @@ class LanguageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
         buttonRussian = findViewById(R.id.btn_russian)
         buttonRussian.setOnClickListener {
             setLocale(Locale("ru"))
-            openMainPage()
+            openMenuPage()
         }
 
         buttonHebrew = findViewById(R.id.btn_hebrew)
         buttonHebrew.setOnClickListener {
             setLocale(Locale("he"))
-            openMainPage()
+            openMenuPage()
         }
 
         buttonEnglish = findViewById(R.id.btn_english)
         buttonEnglish.setOnClickListener {
             setLocale(Locale("en"))
-            openMainPage()
+            openMenuPage()
         }
 
         buttonHide = findViewById(R.id.btn_hide)
@@ -57,11 +54,11 @@ class LanguageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
 
     }
 
-    private fun openMainPage() {
-        val destinationActivity = MainPageActivity::class.java
-        val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
+    private fun openMenuPage() {
+        val destinationActivity = MenuActivity::class.java
+        val menuPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
         finish()
-        startActivity(mainPageActivityIntent)
+        startActivity(menuPageActivityIntent)
     }
 
     private fun setLocale(locale: Locale) {
@@ -78,9 +75,9 @@ class LanguageActivity : BaseActivity(), OnRobotReadyListener, OnGreetModeStateC
         editor.apply()
         // Restart the activity to reflect the language changes
         finishAffinity()
-        val destinationActivity = MainPageActivity::class.java
-        val mainPageActivityIntent = Intent(this@LanguageActivity, destinationActivity)
-        startActivity(mainPageActivityIntent)
+        val destinationActivity = MenuActivity::class.java
+        val menuActivityIntent = Intent(this@LanguageActivity, destinationActivity)
+        startActivity(menuActivityIntent)
     }
 
     override fun onGreetModeStateChanged(state: Int) {

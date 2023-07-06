@@ -1,4 +1,4 @@
-package com.nikita.doroshenko.japanmeeting.services;
+package com.nikita.doroshenko.japanmeeting.retrofit;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClientTemiServer {
+public class RetrofitClientChatGPTServer {
 
     private static Retrofit retrofit = null;
 
@@ -20,7 +20,7 @@ public class RetrofitClientTemiServer {
 
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://20.229.141.8:8000/")
+                    .baseUrl("http://20.229.141.8:5001/")
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

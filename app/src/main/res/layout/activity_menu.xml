@@ -48,11 +48,11 @@
         android:id="@+id/pb_main_menu"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:indeterminate="true"
         android:layout_gravity="center"
         android:layout_marginTop="150dp"
-        android:visibility="visible"
-        android:indeterminateTint="@color/orange_transparent_80percent" />
+        android:indeterminate="true"
+        android:indeterminateTint="@color/orange_transparent_80percent"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/ll_check_list_and_patients_content"
@@ -62,25 +62,27 @@
         android:gravity="center">
 
 
-            <Button
-                android:id="@+id/btn_check_list"
-                android:layout_width="364dp"
-                android:layout_height="364dp"
-                android:layout_marginEnd="124dp"
-                android:layout_gravity="center|center_horizontal"
-                android:background="@drawable/check_list_button"
-                android:visibility="gone"
-                android:foreground="?android:attr/selectableItemBackground" />
+        <Button
+            android:id="@+id/btn_instructions"
+            android:layout_width="364dp"
+            android:layout_height="364dp"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/instructions_button"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:visibility="gone" />
 
 
-            <Button
-                android:id="@+id/btn_patients"
-                android:layout_width="364dp"
-                android:layout_height="364dp"
-                android:layout_gravity="center|center_horizontal"
-                android:background="@drawable/patients_button"
-                android:visibility="gone"
-                android:foreground="?android:attr/selectableItemBackground" />
+        <Button
+            android:id="@+id/btn_check_list"
+            android:layout_width="364dp"
+            android:layout_height="364dp"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/check_list_button"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:visibility="gone" />
+
 
     </LinearLayout>
 
@@ -99,12 +101,21 @@
 <!--            android:foreground="?android:attr/selectableItemBackground" />-->
 
         <Button
-            android:id="@+id/btn_back_to_main_page"
+            android:id="@+id/btn_back_to_language_page"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginStart="50dp"
             android:layout_alignParentStart="true"
             android:background="@drawable/back_button"
+            android:foreground="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/btn_temi_interaction"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/button_temi_interaction"
             android:foreground="?android:attr/selectableItemBackground" />
 
     </RelativeLayout>

@@ -16,19 +16,21 @@ import com.nikita.doroshenko.japanmeeting.models.ChatGPTAnswerModel
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
 import com.nikita.doroshenko.japanmeeting.services.ChatGptService
 import com.nikita.doroshenko.japanmeeting.services.CheckBoxListService
-import com.nikita.doroshenko.japanmeeting.services.RetrofitClientChatGPTServer
-import com.nikita.doroshenko.japanmeeting.services.RetrofitClientTemiServer
+import com.nikita.doroshenko.japanmeeting.retrofit.RetrofitClientChatGPTServer
+import com.nikita.doroshenko.japanmeeting.retrofit.RetrofitClientTemiServer
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.constants.SdkConstants
+import com.robotemi.sdk.listeners.OnConversationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.math.log
 
-class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener {
+class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener{
 
     private lateinit var buttonBackMenu: Button
     private lateinit var buttonTemiInteraction: Button
@@ -82,7 +84,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                     " $instructionTextFirstPart ${checkBoxLayoutsUnchecked.size} $instructionTextSecondPart"
                 )
             } else {
-                robotSpeak("You checked all tasks", true, language)
+                robotSpeak("כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום", true, language)
             }
         }
 
@@ -126,15 +128,17 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                         checkBoxLayoutsUnchecked = checkBoxLayouts.filter { checkBoxLayout ->
                             !checkBoxLayout.checkIsDone
                         }
+                        if (checkBoxLayoutsUnchecked.isEmpty()) {
+                            robotSpeak("כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום", true, language)
+                        }
                         if (isCheckingStart) {
                             if (checkBoxLayoutsUnchecked.isNotEmpty()) {
                                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
-                                robot.askQuestion(" אתֿה עשה ${text}?")
+                                robot.askQuestion(" האם בוצע - ${text}?")
                             } else {
                                 robotSpeak("You checked all tasks", true, language)
                                 isCheckingStart = false
                             }
-
                         }
 
                     }
@@ -170,11 +174,11 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
     private fun sendQuestion(body: HashMap<String, String>) {
         chatGPTService.askQuestion(body).enqueue(object: Callback<ChatGPTAnswerModel> {
             override fun onResponse(call: Call<ChatGPTAnswerModel>, response: Response<ChatGPTAnswerModel>) {
+                progressBarCheckList.visibility = View.GONE
+                checkBoxContent.visibility = View.VISIBLE
                 val answerChatGPT: ChatGPTAnswerModel? = response.body()
                 if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
-                    robot.askQuestion(answerChatGPT.answer + "אני עדיין יכולה לעזור לך ?")
-                } else {
-                    robot.askQuestion("לא הצלחתי למצוא שום דבר. אני עדיין יכולה לעזור לך ?")
+                    robot.askQuestion(answerChatGPT.answer + "." + "אני עדיין יכולה לעזור לך ?")
                 }
             }
 
@@ -248,7 +252,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
             return
         }
         when {
-            asrResult.equals("שלום", ignoreCase = true) -> {
+            asrResult.equals("סדר פעולות", ignoreCase = true) -> {
                 isCheckingStart = true
                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
                 robot.askQuestion(" האם בוצע - ${text}?")
@@ -264,12 +268,14 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
             }
             asrResult.startsWith("תגידי לי", ignoreCase = true) -> {
                 val question = asrResult.drop(8)
-                val body: HashMap<String, String> = HashMap()
-                body["question"] = question
-                // TODO (add checking, question not should be empty, if empty, don't send request)
-                robotSpeak("אני חושבת ...", true, language)
-                sendQuestion(body)
-
+                if (question.isNotEmpty()) {
+                    val body: HashMap<String, String> = HashMap()
+                    body["question"] = question
+                    robotSpeak("אני חושבת ...", true, language)
+                    sendQuestion(body)
+                    progressBarCheckList.visibility = View.VISIBLE
+                    checkBoxContent.visibility = View.GONE
+                }
             }
         }
     }
