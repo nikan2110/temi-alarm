@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout_menu_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_background"
     android:orientation="vertical"
     tools:context=".MenuActivity">
+
+    <LinearLayout
+        android:id="@+id/main_layout_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_header_menu"
@@ -120,6 +128,7 @@
 
     </RelativeLayout>
 
+    </LinearLayout>
 
 
 </LinearLayout>

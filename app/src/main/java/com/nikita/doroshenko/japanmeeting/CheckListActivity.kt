@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
 import com.nikita.doroshenko.japanmeeting.layouts.CheckBoxLayout
 import com.nikita.doroshenko.japanmeeting.models.ChatGPTAnswerModel
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
@@ -21,25 +22,28 @@ import com.nikita.doroshenko.japanmeeting.retrofit.RetrofitClientTemiServer
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.constants.SdkConstants
-import com.robotemi.sdk.listeners.OnConversationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.HashMap
-import kotlin.math.log
 
-class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener{
+class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener, Robot.TtsListener {
 
     private lateinit var buttonBackMenu: Button
     private lateinit var buttonTemiInteraction: Button
     private lateinit var checkBoxContent: LinearLayout
     private lateinit var progressBarCheckList: ProgressBar
 
+    private lateinit var parentLayoutCheckListActivity: LinearLayout
+    private lateinit var mainLayoutCheckListActivity: LinearLayout
+
     private lateinit var robot: Robot
 
     private lateinit var language: String
+
+    private var chatGPTAnswerText = ""
 
     private var isCheckingStart = false
 
@@ -68,6 +72,9 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
         progressBarCheckList = findViewById(R.id.pb_check_list)
         progressBarCheckList.visibility = View.VISIBLE
 
+        parentLayoutCheckListActivity = findViewById(R.id.parent_layout_checklist_activity)
+        mainLayoutCheckListActivity = findViewById(R.id.main_layout_checklist)
+
         buttonBackMenu = findViewById(R.id.btn_back_to_menu)
         buttonBackMenu.setOnClickListener {
             val destinationActivity = MenuActivity::class.java
@@ -78,13 +85,19 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
         buttonTemiInteraction = findViewById(R.id.btn_temi_interaction)
         buttonTemiInteraction.setOnClickListener {
             if (checkBoxLayoutsUnchecked.isNotEmpty()) {
-                val instructionTextFirstPart = resources.getString(R.string.temi_ask_about_tasks_first_part)
-                val instructionTextSecondPart = resources.getString(R.string.temi_ask_about_tasks_second_part)
+                val instructionTextFirstPart =
+                    resources.getString(R.string.temi_ask_about_tasks_first_part)
+                val instructionTextSecondPart =
+                    resources.getString(R.string.temi_ask_about_tasks_second_part)
                 robot.askQuestion(
                     " $instructionTextFirstPart ${checkBoxLayoutsUnchecked.size} $instructionTextSecondPart"
                 )
             } else {
-                robotSpeak("כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום", true, language)
+                robotSpeak(
+                    "כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום",
+                    true,
+                    language
+                )
             }
         }
 
@@ -92,14 +105,18 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
     }
 
     private fun getAllCheckBoxesByLanguage(language: String) {
-        checkBoxListService.getAllCheckBoxesByLanguage(language).enqueue(object : Callback<List<CheckBoxModel>> {
-                override fun onResponse(call: Call<List<CheckBoxModel>>, response: Response<List<CheckBoxModel>>) {
+        checkBoxListService.getAllCheckBoxesByLanguage(language)
+            .enqueue(object : Callback<List<CheckBoxModel>> {
+                override fun onResponse(
+                    call: Call<List<CheckBoxModel>>,
+                    response: Response<List<CheckBoxModel>>
+                ) {
                     progressBarCheckList.visibility = View.GONE
                     val checkBoxModels: List<CheckBoxModel>? = response.body()
                     if (checkBoxModels != null) {
                         var checkBoxModelsSorted: List<CheckBoxModel>? = null
                         if (language == "iw") {
-                             checkBoxModelsSorted = checkBoxModels.sortedByDescending {
+                            checkBoxModelsSorted = checkBoxModels.sortedByDescending {
                                 it.isDone
                             }
                         } else {
@@ -115,11 +132,19 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                             checkBoxLayout.button.setOnClickListener {
                                 val body: HashMap<String, Boolean> = HashMap()
                                 if (checkBoxLayout.checkIsDone) {
-                                    checkBoxLayout.button.background = AppCompatResources.getDrawable(this@CheckListActivity, R.drawable.unchecked_box_background)
+                                    checkBoxLayout.button.background =
+                                        AppCompatResources.getDrawable(
+                                            this@CheckListActivity,
+                                            R.drawable.unchecked_box_background
+                                        )
                                     body["checkBoxStatusUpdate"] = false
                                     changeStatusRequest(checkBoxLayout, body)
                                 } else {
-                                    checkBoxLayout.button.background = AppCompatResources.getDrawable(this@CheckListActivity, R.drawable.checked_box_background)
+                                    checkBoxLayout.button.background =
+                                        AppCompatResources.getDrawable(
+                                            this@CheckListActivity,
+                                            R.drawable.checked_box_background
+                                        )
                                     body["checkBoxStatusUpdate"] = true
                                     changeStatusRequest(checkBoxLayout, body)
                                 }
@@ -129,14 +154,22 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                             !checkBoxLayout.checkIsDone
                         }
                         if (checkBoxLayoutsUnchecked.isEmpty()) {
-                            robotSpeak("כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום", true, language)
+                            robotSpeak(
+                                "כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום",
+                                true,
+                                language
+                            )
                         }
                         if (isCheckingStart) {
                             if (checkBoxLayoutsUnchecked.isNotEmpty()) {
                                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
                                 robot.askQuestion(" האם בוצע - ${text}?")
                             } else {
-                                robotSpeak("You checked all tasks", true, language)
+                                robotSpeak(
+                                    "כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום",
+                                    true,
+                                    language
+                                )
                                 isCheckingStart = false
                             }
                         }
@@ -147,15 +180,24 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                 override fun onFailure(call: Call<List<CheckBoxModel>>, t: Throwable) {
                     progressBarCheckList.visibility = View.VISIBLE
                     val errorMessage = t.message
-                    Log.e("getCheckListsFailureByLanguage", "Error retrieving data from server: $errorMessage")
+                    Log.e(
+                        "getCheckListsFailureByLanguage",
+                        "Error retrieving data from server: $errorMessage"
+                    )
                 }
             })
     }
 
-    private fun changeStatusRequest(checkBoxLayout: CheckBoxLayout, body: HashMap<String, Boolean>) {
+    private fun changeStatusRequest(
+        checkBoxLayout: CheckBoxLayout,
+        body: HashMap<String, Boolean>
+    ) {
         checkBoxListService.updateCheckBoxStatus(checkBoxLayout.checkBoxId, body)
             .enqueue(object : Callback<CheckBoxModel> {
-                override fun onResponse(call: Call<CheckBoxModel>, response: Response<CheckBoxModel>) {
+                override fun onResponse(
+                    call: Call<CheckBoxModel>,
+                    response: Response<CheckBoxModel>
+                ) {
                     val checkBoxModel: CheckBoxModel? = response.body()
                     if (checkBoxModel != null) {
                         Log.i("changedStatus", "changed status to ${checkBoxModel.done()} ")
@@ -164,26 +206,37 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                         getAllCheckBoxesByLanguage(language)
                     }
                 }
+
                 override fun onFailure(call: Call<CheckBoxModel>, t: Throwable) {
                     val errorMessage = t.message
-                    Log.e("changedStatusFailure", "Error retrieving data from server: $errorMessage")
+                    Log.e(
+                        "changedStatusFailure",
+                        "Error retrieving data from server: $errorMessage"
+                    )
                 }
             })
     }
 
     private fun sendQuestion(body: HashMap<String, String>) {
-        chatGPTService.askQuestion(body).enqueue(object: Callback<ChatGPTAnswerModel> {
-            override fun onResponse(call: Call<ChatGPTAnswerModel>, response: Response<ChatGPTAnswerModel>) {
-                progressBarCheckList.visibility = View.GONE
-                checkBoxContent.visibility = View.VISIBLE
+        chatGPTService.askQuestion(body).enqueue(object : Callback<ChatGPTAnswerModel> {
+            override fun onResponse(
+                call: Call<ChatGPTAnswerModel>,
+                response: Response<ChatGPTAnswerModel>
+            ) {
+                showElementsAndHidePicture()
                 val answerChatGPT: ChatGPTAnswerModel? = response.body()
                 if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
-                    robot.askQuestion(answerChatGPT.answer + "." + "אני עדיין יכולה לעזור לך ?")
+                    chatGPTAnswerText = answerChatGPT.answer
+                    robotSpeak(chatGPTAnswerText, true, language)
                 }
             }
 
             override fun onFailure(call: Call<ChatGPTAnswerModel>, t: Throwable) {
-                Toast.makeText(this@CheckListActivity, "Something wrong with server", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@CheckListActivity,
+                    "Something wrong with server",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
@@ -193,7 +246,12 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
         val checkBoxesLayout = ArrayList<CheckBoxLayout>()
         for (checkListModel in checkBoxModels) {
             val checkBoxLayout = CheckBoxLayout(
-                this, checkListModel.shortDescription, checkListModel.id, checkListModel.done(), checkListModel.tag)
+                this,
+                checkListModel.shortDescription,
+                checkListModel.id,
+                checkListModel.done(),
+                checkListModel.tag
+            )
             checkBoxContent.addView(checkBoxLayout)
             checkBoxesLayout.add(checkBoxLayout)
         }
@@ -204,13 +262,31 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
     private fun robotSpeak(text: String, showConversationLayer: Boolean, language: String) {
         when (language) {
             "iw" -> {
-                robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, TtsRequest.Language.HE_IL))
+                robot.speak(
+                    TtsRequest.create(
+                        text,
+                        isShowOnConversationLayer = showConversationLayer,
+                        TtsRequest.Language.HE_IL
+                    )
+                )
             }
             "ru" -> {
-                robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, TtsRequest.Language.RU_RU))
+                robot.speak(
+                    TtsRequest.create(
+                        text,
+                        isShowOnConversationLayer = showConversationLayer,
+                        TtsRequest.Language.RU_RU
+                    )
+                )
             }
             "en" -> {
-                robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, TtsRequest.Language.EN_US))
+                robot.speak(
+                    TtsRequest.create(
+                        text,
+                        isShowOnConversationLayer = showConversationLayer,
+                        TtsRequest.Language.EN_US
+                    )
+                )
             }
         }
     }
@@ -219,12 +295,14 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
         super.onStart()
         robot.addOnRobotReadyListener(this)
         robot.addAsrListener(this)
+        robot.addTtsListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         robot.removeOnRobotReadyListener(this)
         robot.removeAsrListener(this)
+        robot.removeTtsListener(this)
     }
 
     override fun onRobotReady(isReady: Boolean) {
@@ -240,7 +318,10 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
     override fun onAsrResult(asrResult: String) {
         Log.i("AsrResult", "Received asrResult: $asrResult")
         try {
-            val metadata = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).metaData ?: return
+            val metadata = packageManager.getApplicationInfo(
+                packageName,
+                PackageManager.GET_META_DATA
+            ).metaData ?: return
             if (!robot.isSelectedKioskApp()) {
                 return
             }
@@ -271,13 +352,29 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                 if (question.isNotEmpty()) {
                     val body: HashMap<String, String> = HashMap()
                     body["question"] = question
-                    robotSpeak("אני חושבת ...", true, language)
+                    robotSpeak("אני חושבת ...", false, language)
                     sendQuestion(body)
-                    progressBarCheckList.visibility = View.VISIBLE
-                    checkBoxContent.visibility = View.GONE
+                    mainLayoutCheckListActivity.visibility = View.GONE
+                    parentLayoutCheckListActivity.background =  ResourcesCompat.getDrawable(resources, R.drawable.think_picture, null)
+
                 }
             }
+            else -> {
+                robot.askQuestion("Sorry, I don't understand your question. Try again, say:   ״ תגידי לי ״ and your question")
+            }
         }
+    }
+
+    override fun onTtsStatusChanged(ttsRequest: TtsRequest) {
+        Log.i("Status", ttsRequest.status.toString())
+        if (chatGPTAnswerText.isNotEmpty() && ttsRequest.status == TtsRequest.Status.COMPLETED) {
+            chatGPTAnswerText = ""
+            robot.askQuestion( "אני עדיין יכולה לעזור לך ?")
+        }
+    }
+    private fun showElementsAndHidePicture() {
+        parentLayoutCheckListActivity.background =  ResourcesCompat.getDrawable(resources, R.drawable.main_background, null)
+        mainLayoutCheckListActivity.visibility = View.VISIBLE
     }
 }
 

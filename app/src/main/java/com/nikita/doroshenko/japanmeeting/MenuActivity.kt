@@ -8,9 +8,11 @@ import android.os.StrictMode
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
 import com.nikita.doroshenko.japanmeeting.models.ChatGPTAnswerModel
 import com.nikita.doroshenko.japanmeeting.models.CheckBoxModel
 import com.nikita.doroshenko.japanmeeting.retrofit.RetrofitClientChatGPTServer
@@ -25,7 +27,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
+class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener, Robot.TtsListener  {
 
     private lateinit var mediaPlayer: MediaPlayer
 
@@ -33,6 +35,9 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
     private lateinit var buttonTemiInstructions: Button
     private lateinit var buttonBackLanguagePage: Button
     private lateinit var buttonTemiInteraction: Button
+
+    private lateinit var parentLayoutMenuActivity: LinearLayout
+    private lateinit var mainLayoutMenuActivity: LinearLayout
 
     private lateinit var robot: Robot
 
@@ -42,6 +47,8 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
 
     private var retrofit = RetrofitClientTemiServer.getClient()
     private var checkBoxListService = retrofit.create(CheckBoxListService::class.java)
+
+    private var chatGPTAnswerText = ""
 
     private var retrofitChatGPTServer = RetrofitClientChatGPTServer.getClient()
     private var chatGPTService = retrofitChatGPTServer.create(ChatGptService::class.java)
@@ -61,6 +68,9 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
         mediaPlayer = MediaPlayer.create(this, R.raw.siren)
 
         progressBarMenu = findViewById(R.id.pb_main_menu)
+
+        parentLayoutMenuActivity = findViewById(R.id.parent_layout_menu_activity)
+        mainLayoutMenuActivity = findViewById(R.id.main_layout_menu)
 
         buttonCheckList = findViewById(R.id.btn_check_list)
         buttonTemiInstructions = findViewById(R.id.btn_instructions)
@@ -86,7 +96,7 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
 
         buttonTemiInteraction = findViewById(R.id.btn_temi_interaction)
         buttonTemiInteraction.setOnClickListener {
-            robot.askQuestion("שאל אותי הכל על הכנת המרפאה למעבר משגרה לחירום. בבקשה תגיד ״תגידי לי״ ושאלה שלך")
+            robot.askQuestion("שאל אותי הכל על הכנת המרפאה למעבר משגרה לחירום. בבקשה תגיד ״ תגידי לי ״ ושאלה שלך")
         }
 
         checkBoxListService.getAllCheckBoxesByLanguageAndStatus(language, false).enqueue(object: Callback<List<CheckBoxModel>>{
@@ -134,16 +144,25 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
         progressBarMenu.visibility = View.GONE
     }
 
+    private fun showElementsAndHidePicture() {
+        parentLayoutMenuActivity.background =  ResourcesCompat.getDrawable(resources, R.drawable.main_background, null)
+        mainLayoutMenuActivity.visibility = View.VISIBLE
+    }
+
+
+
     override fun onStart() {
         super.onStart()
         robot.addOnRobotReadyListener(this)
         robot.addAsrListener(this)
+        robot.addTtsListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         robot.removeOnRobotReadyListener(this)
         robot.removeAsrListener(this)
+        robot.removeTtsListener(this)
     }
 
     override fun onRobotReady(isReady: Boolean) {
@@ -175,13 +194,15 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
                 if (question.isNotEmpty()) {
                     val body: HashMap<String, String> = HashMap()
                     body["question"] = question
-                    robotSpeak("אני חושבת ...", true, language)
+                    robotSpeak("אני חושבת ...", false, language)
                     sendQuestion(body)
-                    buttonCheckList.visibility = View.GONE
-                    buttonTemiInstructions.visibility = View.GONE
-                    progressBarMenu.visibility = View.VISIBLE
+                    mainLayoutMenuActivity.visibility = View.GONE
+                    parentLayoutMenuActivity.background =  ResourcesCompat.getDrawable(resources, R.drawable.think_picture, null)
+
 
                 }
+            } else -> {
+                robot.askQuestion("Sorry, I don't understand your question. Try again, say:   ״ תגידי לי ״ and your question")
             }
         }
     }
@@ -189,10 +210,11 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
     private fun sendQuestion(body: HashMap<String, String>) {
         chatGPTService.askQuestion(body).enqueue(object: Callback<ChatGPTAnswerModel> {
             override fun onResponse(call: Call<ChatGPTAnswerModel>, response: Response<ChatGPTAnswerModel>) {
-                showElementsAndHideProgressBar()
+                showElementsAndHidePicture()
                 val answerChatGPT: ChatGPTAnswerModel? = response.body()
                 if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
-                    robot.askQuestion(answerChatGPT.answer + "." + "אני עדיין יכולה לעזור לך ?")
+                    chatGPTAnswerText = answerChatGPT.answer
+                    robotSpeak(chatGPTAnswerText, true, language)
                 }
             }
 
@@ -220,6 +242,14 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener  {
                     TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer,
                     TtsRequest.Language.EN_US))
             }
+        }
+    }
+
+    override fun onTtsStatusChanged(ttsRequest: TtsRequest) {
+        Log.i("Status", ttsRequest.status.toString())
+        if (chatGPTAnswerText.isNotEmpty() && ttsRequest.status == TtsRequest.Status.COMPLETED) {
+            chatGPTAnswerText = ""
+            robot.askQuestion( "אני עדיין יכולה לעזור לך ?")
         }
     }
 }
