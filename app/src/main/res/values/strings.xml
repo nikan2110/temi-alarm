@@ -3,11 +3,6 @@
     <string name="safety_zone_sign">safety_zone_sign</string>
     <string name="emergency_kit_sign">emergency_kit_sign</string>
     <string name="forward_instructions_sign">forward_instructions_sign</string>
-    <string name="pregnant_woman_image">pregnant_woman_image</string>
-    <string name="diabetic_patient_image">diabetic_patient_image</string>
-    <string name="asthma_patient_image">asthma_patient_image</string>
-    <string name="senior_patient_image">senior_patient_image</string>
-    <string name="pregnant_details">pregnant_details</string>
     <string name="emergency">EMERGENCY</string>
     <string name="instructions">INSTRUCTIONS</string>
     <string name="check_list">CHECK LIST</string>
@@ -29,5 +24,9 @@
     <string name="temi_ask_about_tasks_second_part">
         not solve tasks. If you want to check it with Temi, say START CHECK
     </string>
+    <string name="all_tasks_completed">"כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום"</string>
+    <string name="temi_does_not_understand_question">סליחה, אינני הבנתי את השאלה, בבקשה אמור " תגידי לי " ולאחר מכן את שאלתך</string>
+    <string name="ask_temi_your_question_text">"שאל אותי הכל על הכנת המרפאה למעבר משגרה לחירום. בבקשה אמור ״ תגידי לי ״ ולאחר מכן את שאלתך"</string>
+    <string name="can_temi_still_help_text">"האם אני עדיין יכולה לעזור לך ?"</string>
 
 </resources>

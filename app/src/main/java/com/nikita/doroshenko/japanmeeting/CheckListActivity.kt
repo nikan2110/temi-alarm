@@ -93,11 +93,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                     " $instructionTextFirstPart ${checkBoxLayoutsUnchecked.size} $instructionTextSecondPart"
                 )
             } else {
-                robotSpeak(
-                    "כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום",
-                    true,
-                    language
-                )
+                robotSpeak(resources.getString(R.string.all_tasks_completed), true, language)
             }
         }
 
@@ -154,22 +150,14 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                             !checkBoxLayout.checkIsDone
                         }
                         if (checkBoxLayoutsUnchecked.isEmpty()) {
-                            robotSpeak(
-                                "כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום",
-                                true,
-                                language
-                            )
+                            robotSpeak(resources.getString(R.string.all_tasks_completed), true, language)
                         }
                         if (isCheckingStart) {
                             if (checkBoxLayoutsUnchecked.isNotEmpty()) {
                                 val text = checkBoxLayoutsUnchecked[0].checkBoxText
                                 robot.askQuestion(" האם בוצע - ${text}?")
                             } else {
-                                robotSpeak(
-                                    "כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום",
-                                    true,
-                                    language
-                                )
+                                robotSpeak(resources.getString(R.string.all_tasks_completed), true, language)
                                 isCheckingStart = false
                             }
                         }
@@ -226,7 +214,7 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                 showElementsAndHidePicture()
                 val answerChatGPT: ChatGPTAnswerModel? = response.body()
                 if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
-                    chatGPTAnswerText = answerChatGPT.answer
+                    chatGPTAnswerText = "תודה על שאלתך." + answerChatGPT.answer
                     robotSpeak(chatGPTAnswerText, true, language)
                 }
             }
@@ -260,35 +248,13 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
 
 
     private fun robotSpeak(text: String, showConversationLayer: Boolean, language: String) {
-        when (language) {
-            "iw" -> {
-                robot.speak(
-                    TtsRequest.create(
-                        text,
-                        isShowOnConversationLayer = showConversationLayer,
-                        TtsRequest.Language.HE_IL
-                    )
-                )
-            }
-            "ru" -> {
-                robot.speak(
-                    TtsRequest.create(
-                        text,
-                        isShowOnConversationLayer = showConversationLayer,
-                        TtsRequest.Language.RU_RU
-                    )
-                )
-            }
-            "en" -> {
-                robot.speak(
-                    TtsRequest.create(
-                        text,
-                        isShowOnConversationLayer = showConversationLayer,
-                        TtsRequest.Language.EN_US
-                    )
-                )
-            }
+        val ttsLanguage = when (language) {
+            "iw" -> TtsRequest.Language.HE_IL
+            "ru" -> TtsRequest.Language.RU_RU
+            "en" -> TtsRequest.Language.EN_US
+            else -> throw IllegalArgumentException("Unsupported language: $language")
         }
+        robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, ttsLanguage))
     }
 
     override fun onStart() {
@@ -360,16 +326,16 @@ class CheckListActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListene
                 }
             }
             else -> {
-                robot.askQuestion("Sorry, I don't understand your question. Try again, say:   ״ תגידי לי ״ and your question")
+                robot.askQuestion(resources.getString(R.string.temi_does_not_understand_question) + " " + "או אמור סדר פעולות")
             }
         }
     }
 
     override fun onTtsStatusChanged(ttsRequest: TtsRequest) {
         Log.i("Status", ttsRequest.status.toString())
-        if (chatGPTAnswerText.isNotEmpty() && ttsRequest.status == TtsRequest.Status.COMPLETED) {
+        if (ttsRequest.speech.startsWith("תודה על שאלתך.") && ttsRequest.status == TtsRequest.Status.COMPLETED) {
             chatGPTAnswerText = ""
-            robot.askQuestion( "אני עדיין יכולה לעזור לך ?")
+            robot.askQuestion( resources.getString(R.string.can_temi_still_help_text))
         }
     }
     private fun showElementsAndHidePicture() {

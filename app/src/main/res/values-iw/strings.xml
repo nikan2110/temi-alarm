@@ -3,11 +3,6 @@
     <string name="safety_zone_sign">знак безопасной зоны</string>
     <string name="emergency_kit_sign">знак комплекта первой помощи</string>
     <string name="forward_instructions_sign">знак следования инструкциям</string>
-    <string name="pregnant_woman_image">изображение беременной женщины</string>
-    <string name="diabetic_patient_image">изображение пациента с диабетом</string>
-    <string name="asthma_patient_image">изображение пациента с астмой</string>
-    <string name="senior_patient_image">изображение старого пациента</string>
-    <string name="pregnant_details">детали беременной пациентки</string>
     <string name="emergency">חירום</string>
     <string name="instructions">הוראות</string>
     <string name="check_list">בדוק רשימה</string>
@@ -25,4 +20,8 @@
     </string>
     <string name="temi_ask_about_tasks_second_part">
      משימות פתוחות. האם אתה רוצה לבדוק את זה עם Temi,בבקשה תגיד ״סדר פעולות״</string>
+    <string name="all_tasks_completed">"כל המשימות הושלמו למעבר משגרה לחירום - המרפאה מוכנה לפעילות בשעת חירום"</string>
+    <string name="temi_does_not_understand_question">סליחה, אינני הבנתי את השאלה, בבקשה אמור " תגידי לי " ולאחר מכן את שאלתך</string>
+    <string name="ask_temi_your_question_text">"שאל אותי הכל על הכנת המרפאה למעבר משגרה לחירום. בבקשה אמור ״ תגידי לי ״ ולאחר מכן את שאלתך"</string>
+    <string name="can_temi_still_help_text">"האם אני עדיין יכולה לעזור לך ?"</string>
 </resources>

@@ -96,7 +96,7 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener, Ro
 
         buttonTemiInteraction = findViewById(R.id.btn_temi_interaction)
         buttonTemiInteraction.setOnClickListener {
-            robot.askQuestion("שאל אותי הכל על הכנת המרפאה למעבר משגרה לחירום. בבקשה תגיד ״ תגידי לי ״ ושאלה שלך")
+            robot.askQuestion(resources.getString(R.string.ask_temi_your_question_text))
         }
 
         checkBoxListService.getAllCheckBoxesByLanguageAndStatus(language, false).enqueue(object: Callback<List<CheckBoxModel>>{
@@ -202,7 +202,7 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener, Ro
 
                 }
             } else -> {
-                robot.askQuestion("Sorry, I don't understand your question. Try again, say:   ״ תגידי לי ״ and your question")
+                robot.askQuestion(resources.getString(R.string.temi_does_not_understand_question))
             }
         }
     }
@@ -213,7 +213,7 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener, Ro
                 showElementsAndHidePicture()
                 val answerChatGPT: ChatGPTAnswerModel? = response.body()
                 if (answerChatGPT != null && answerChatGPT.answer.isNotEmpty()) {
-                    chatGPTAnswerText = answerChatGPT.answer
+                    chatGPTAnswerText = "תודה על שאלתך." + answerChatGPT.answer
                     robotSpeak(chatGPTAnswerText, true, language)
                 }
             }
@@ -225,31 +225,21 @@ class MenuActivity : BaseActivity(), OnRobotReadyListener, Robot.AsrListener, Ro
         })
     }
 
-    fun robotSpeak(text: String, showConversationLayer: Boolean, language: String) {
-        when(language) {
-            "iw" -> {
-                robot.speak(
-                    TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer,
-                    TtsRequest.Language.HE_IL))
-            }
-            "ru" -> {
-                robot.speak(
-                    TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer,
-                    TtsRequest.Language.RU_RU))
-            }
-            "en" -> {
-                robot.speak(
-                    TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer,
-                    TtsRequest.Language.EN_US))
-            }
+    private fun robotSpeak(text: String, showConversationLayer: Boolean, language: String) {
+        val ttsLanguage = when (language) {
+            "iw" -> TtsRequest.Language.HE_IL
+            "ru" -> TtsRequest.Language.RU_RU
+            "en" -> TtsRequest.Language.EN_US
+            else -> throw IllegalArgumentException("Unsupported language: $language")
         }
+        robot.speak(TtsRequest.create(text, isShowOnConversationLayer = showConversationLayer, ttsLanguage))
     }
 
     override fun onTtsStatusChanged(ttsRequest: TtsRequest) {
         Log.i("Status", ttsRequest.status.toString())
-        if (chatGPTAnswerText.isNotEmpty() && ttsRequest.status == TtsRequest.Status.COMPLETED) {
+        if (ttsRequest.speech.startsWith("תודה על שאלתך.") && ttsRequest.status == TtsRequest.Status.COMPLETED) {
             chatGPTAnswerText = ""
-            robot.askQuestion( "אני עדיין יכולה לעזור לך ?")
+            robot.askQuestion( resources.getString(R.string.can_temi_still_help_text))
         }
     }
 }
